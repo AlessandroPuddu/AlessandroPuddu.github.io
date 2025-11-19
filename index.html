@@ -1,211 +1,367 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alessandro Puddu - Unity Developer Portfolio</title>
+    <title>Alessandro Puddu | Senior Unity Engineer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --accent: #3498db; /* Professional Blue */
+            --accent-hover: #2980b9;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --spacing: 2rem;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.8;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
-            max-width: 960px;
-            margin: auto;
-            padding: 1rem;
-            background-color: #F3F3F3;
+            background-color: var(--bg-color);
+            color: var(--text-main);
         }
+
+        /* --- HEADER & HERO --- */
         header {
-            background-color: #2C3E50;
-            color: white;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            padding: 4rem 1rem;
             text-align: center;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            border-radius: 8px;
+            border-bottom: 1px solid #333;
         }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin: 0 0 1rem 0;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            color: var(--text-main);
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover { color: var(--accent); }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 24px;
+            color: white;
+            background-color: var(--accent);
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, background-color 0.2s;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn i { margin-right: 8px; }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        /* --- LAYOUT --- */
         main {
-            padding: 2rem;
-            background-color: white;
+            max-width: 1100px;
+            margin: auto;
+            padding: 2rem 1.5rem;
+        }
+
+        section { margin-bottom: 4rem; }
+
+        h2 {
+            font-size: 1.8rem;
+            border-left: 4px solid var(--accent);
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        /* --- SKILLS GRID --- */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .skill-card {
+            background-color: var(--card-bg);
+            padding: 1rem;
             border-radius: 8px;
-            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
+            text-align: center;
+            border: 1px solid #333;
         }
-        h2, h3 {
-            margin-bottom: 0.5rem;
-            margin-top: 1rem;
+
+        .skill-card strong { display: block; color: white; margin-bottom: 0.5rem; }
+        .skill-card span { color: var(--text-muted); font-size: 0.85rem; }
+
+        /* --- PROJECTS --- */
+        .project-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid #333;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
+
+        .project-content { padding: 2rem; }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
             margin-bottom: 1rem;
         }
-        a {
-            color: #2C3E50;
-            text-decoration: none;
+
+        .project-title h3 { margin: 0; font-size: 1.5rem; color: white; }
+        .project-role { color: var(--accent); font-weight: 600; font-size: 0.9rem; display: block; margin-top: 0.25rem; }
+        
+        .tech-stack {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
         }
-        a:hover {
-            text-decoration: underline;
+
+        .tech-tag {
+            background-color: #2c2c2c;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: monospace;
         }
-        /* Responsive video */
+
+        /* Responsive Video */
         .video-container {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+            padding-bottom: 56.25%; /* 16:9 */
             height: 0;
-            overflow: hidden;
+            background: black;
         }
         
         .video-container iframe {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
         }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            color: white;
-            background-color: #2980B9;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-            margin-bottom: 1rem;
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background-color: #0d0d0d;
+            color: var(--text-muted);
+            border-top: 1px solid #333;
         }
-        
-        .btn:hover {
-            background-color: #3498DB;
-        }
-        
-        .btn i {
-            margin-right: 5px;
-        }
-        .btn a {
-            color: white;
-        }
-        .btn a:hover {
-            text-decoration: none;
+
+        /* Mobile Tweaks */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .project-header { flex-direction: column; }
         }
     </style>
 </head>
 <body>
+
     <header>
-        <h1>Alessandro Puddu - Unity Developer Portfolio</h1>
+        <h1>Alessandro Puddu</h1>
+        <p class="subtitle">Senior Unity Engineer specializing in Multiplayer Architecture, Optimization, and VR/AR.</p>
+        
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/alessandro-puddu-65118a152/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/AlessandroPuddu" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="mailto:alessandro.puddu94@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+        <a href="https://drive.google.com/file/d/1cFx7aPTWL08Qx7CWcOtOZVBPL2Dmj1gE/view?usp=drive_link" class="btn" target="_blank">
+            <i class="fas fa-file-download"></i> Download Resume
+        </a>
     </header>
+
     <main>
         <section>
-            <h2>About Me</h2>
-            <p>
-                I am a dedicated Unity Developer with a breadth of skills spanning gameplay engineering, AI development, shader programming, and more. With a rich background in Computer Science from the University of Milan, I have used my skills to contribute to a variety of immersive games, including the RPG 'Alaloth: Champions of The Four Kingdoms' and 'Apocalypse Rangers', a post-apocalyptic online twin-stick shooter.
-            </p>
-            <p>
-                My technical prowess extends beyond gameplay, with demonstrated proficiency in AR/VR application development, networking, and an array of development tools like Unity, C#, Git, Asana, Jira, Visual Studio, and JetBrains Rider. A committed learner, I am also actively enhancing my skills in C++ and Unreal Engine. Beyond my technical abilities, I bring a keen understanding of SOLID principles, design patterns, Agile development methodology, and a strong team spirit. 
-            </p>
-            <p>
-                When not developing games, I can be found exploring various game genres as an avid gamer, and playing guitar and bass guitar as an amateur musician, expressing my creativity beyond the digital realm.
-            </p>
-        </section>
-        
-        <section>
-            <h2>Game Projects</h2>
-
-            <h3>Alaloth, Champions of the four kingdoms</h3>
-            <button type="button" class="btn btn-steam">
-                <i class="fab fa-steam"></i>
-                <a href="https://store.steampowered.com/app/919360/Alaloth_Champions_of_The_Four_Kingdoms/">View on Steam</a>
-            </button>
-            <p><strong>Date:</strong> March 2021 - Current</p>
-            <p>As a game programmer for "Alaloth, Champions of the four kingdoms," I've been contributing to a skill-driven ARPG game that draws inspiration from classics like Baldur’s Gate and Pillars of Eternity. Built with Unity and coded in C#, the game blends quick action with a compelling story.</p>
-            <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/pDqDUOuabC4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <h2>Core Competencies</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <i class="fas fa-network-wired" style="color: #3498db; margin-bottom: 10px;"></i>
+                    <strong>Multiplayer</strong>
+                    <span>Netcode (NGO), Mirror, Authoritative Server</span>
+                </div>
+                <div class="skill-card">
+                    <i class="fas fa-tachometer-alt" style="color: #e74c3c; margin-bottom: 10px;"></i>
+                    <strong>Optimization</strong>
+                    <span>Profiler, Addressables, DOTS, Memory Management</span>
+                </div>
+                <div class="skill-card">
+                    <i class="fas fa-vr-cardboard" style="color: #9b59b6; margin-bottom: 10px;"></i>
+                    <strong>XR Development</strong>
+                    <span>OpenXR, Oculus Quest, HoloLens, WebGL</span>
+                </div>
+                <div class="skill-card">
+                    <i class="fas fa-code" style="color: #2ecc71; margin-bottom: 10px;"></i>
+                    <strong>Engineering</strong>
+                    <span>C# (Advanced), SOLID, HLSL Shaders, Tools Dev</span>
+                </div>
             </div>
-            
-            <h3>Apocalypse Rangers</h3>
-            <button type="button" class="btn">
-                <a href="https://github.com/Matteo-Moriani/VoxcanoGames">View on GitHub</a>
-                <i class="fab fa-github"></i>
-            </button>
-            <p><strong>Date:</strong> 2020-2021</p>
-            <p>Apocalypse Rangers is a post-apocalyptic online twin-stick shooter game developed during the Online Game Design course at the University of Milan. As a key programmer, I developed gameplay systems, AI, online features, and shaders. The game bagged the third place at the New Game Designer 2020 in the Online Games Category.</p> 
-            <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/NWYD53nWk_c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            
-            <h3>The Ordinary Day of a Repair Guy</h3>
-            <button type="button" class="btn">
-                <i class="fas fa-gamepad"></i>
-                <a href="https://globalgamejam.org/2020/games/mannequins-2">View on Global Game Jam</a>
-            </button>
-            <button type="button" class="btn">
-                <a href="https://github.com/AlessandroPuddu/GGJ2020">View on GitHub</a>
-                <i class="fab fa-github"></i>
-            </button>
-            <p><strong>Date:</strong> Global Game Jam 2020</p>
-            <p>At the Global Game Jam 2020 at Politecnico di Milano, I was part of a team that created an immersive VR game, "The Ordinary Day of a Repair Guy," for Oculus Quest. I primarily worked on implementing VR elements and interactions to offer a seamless gameplay experience.</p>
-            <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/4GKqkPqLld4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            
-            <h3>Hell for one</h3>
-            <button type="button" class="btn">
-                <i class="fab fa-itch-io"></i>
-                <a href="https://lilprince18.itch.io/hell-for-one">View on Itch.io</a>
-            </button>
-            <button type="button" class="btn">
-                <a href="https://github.com/Matteo-Moriani/HellForOne">View on GitHub</a>
-                <i class="fab fa-github"></i>
-            </button>
-            <p><strong>Date:</strong> 2019-2020</p>
-            <p>Hell for One is a unique game, combining elements of 3D RTS and action. As part of the development team, I implemented core gameplay systems and AI, contributing to its win at the New Game Designer 2020 in the Offline Games Category.</p>
-            <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/CdTGbZ79N0o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            
-            <h3>RuNeglect</h3>
-            <p><strong>Date:</strong> 2018-2019</p>
-            <p>For my Bachelor's thesis at the AIS-Lab, University of Milan, I developed "RuNeglect," a 2.5D endless runner game on Microsoft HoloLens intended for rehabilitating patients affected by hemispatial neglect. It utilized HoloLens spatial recognition capabilities to allow players to choose a surface for the game area, providing an immersive and therapeutic experience.</p>
-
         </section>
 
         <section>
-            <h2>Contact</h2>
-            <p>
-                I'd love to hear from you! Here's how you can reach me:
-            </p>
-            <p>
-                <button type="button" class="btn">
-                    <i class="fas fa-envelope"></i>
-                    <a href="mailto:alessandro.puddu94@gmail.com">Email me</a>
-                </button>
-            </p>
-            <p>
-                <button type="button" class="btn">
-                    <i class="fas fa-phone-alt"></i>
-                    Call me: +39 3913270803
-                </button>
-            </p>
-            <p>
-                <button type="button" class="btn">
-                    <i class="fab fa-linkedin"></i>
-                    <a href="https://www.linkedin.com/in/alessandro-puddu-65118a152/">Connect on LinkedIn</a>
-                </button>
-            </p>
-            <p>
-                <button type="button" class="btn">
-                    <i class="fab fa-github"></i>
-                    <a href="https://github.com/AlessandroPuddu">Check out my GitHub</a>
-                </button>
-            </p>
-            <p>
-                <button type="button" class="btn">
-                    <i class="fas fa-file-alt"></i>
-                    <a href="https://drive.google.com/file/d/1cFx7aPTWL08Qx7CWcOtOZVBPL2Dmj1gE/view?usp=sharing">View my CV</a>
-                </button>
-            </p>
+            <h2>Selected Projects</h2>
+
+            <article class="project-card">
+                <div class="project-content">
+                    <div class="project-header">
+                        <div class="project-title">
+                            <h3>Multiplayer Physics Simulator</h3>
+                            <span class="project-role">Lead Unity Developer | Capgemini Engineering</span>
+                        </div>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Unity Netcode (NGO)</span>
+                        <span class="tech-tag">Obi Physics</span>
+                        <span class="tech-tag">Addressables</span>
+                    </div>
+                    <p>
+                        Architected a real-time multiplayer drone simulator with an authoritative server model. 
+                        Engineered custom solver steps for the Obi Physics engine, reducing frame times from >16ms to a stable 60 FPS. 
+                        Implemented a modular "Project-to-Project" asset loading system using Unity Addressables to handle large-scale environments.
+                    </p>
+                </div>
+                </article>
+
+            <article class="project-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/pDqDUOuabC4" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <div class="project-title">
+                            <h3>Alaloth: Champions of the Four Kingdoms</h3>
+                            <span class="project-role">Game Programmer | Steam (Shipped)</span>
+                        </div>
+                        <a href="https://store.steampowered.com/app/919360/Alaloth_Champions_of_The_Four_Kingdoms/" target="_blank" class="btn btn-outline">
+                            <i class="fab fa-steam"></i> View on Steam
+                        </a>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Core Systems</span>
+                        <span class="tech-tag">UI Architecture</span>
+                        <span class="tech-tag">Tooling</span>
+                    </div>
+                    <p>
+                        Contributed to core gameplay systems for a commercially successful ARPG with 10k+ wishlists. 
+                        Developed custom Editor Tools to automate world-building, reducing level design iterations from hours to minutes. 
+                        Implemented complex UI state machines and narrative event systems.
+                    </p>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/NWYD53nWk_c" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <div class="project-title">
+                            <h3>Apocalypse Rangers</h3>
+                            <span class="project-role">Network & Gameplay Programmer</span>
+                        </div>
+                        <a href="https://github.com/Matteo-Moriani/VoxcanoGames" target="_blank" class="btn btn-outline">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Mirror Networking</span>
+                        <span class="tech-tag">HLSL Shaders</span>
+                        <span class="tech-tag">AI</span>
+                    </div>
+                    <p>
+                        Developed a robust client-server architecture using Mirror Networking. 
+                        Wrote custom HLSL shaders (Toon, Dynamic Grass) and computed shader-based terrain rendering. 
+                        <strong>Award:</strong> New Game Designer 2020 - 3rd Place (Online Category).
+                    </p>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/CdTGbZ79N0o" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <div class="project-title">
+                            <h3>Hell for One</h3>
+                            <span class="project-role">AI & Gameplay Programmer</span>
+                        </div>
+                        <a href="https://lilprince18.itch.io/hell-for-one" target="_blank" class="btn btn-outline">
+                            <i class="fab fa-itch-io"></i> Play on Itch.io
+                        </a>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">RTS AI</span>
+                        <span class="tech-tag">Steering Behaviors</span>
+                    </div>
+                    <p>
+                        Designed intelligent agent AI for a hybrid RTS/Action game, implementing steering behaviors and state machines.
+                        Optimized unit spawning and management for large-scale battles.
+                        <strong>Award:</strong> New Game Designer 2020 - 1st Place.
+                    </p>
+                </div>
+            </article>
+
         </section>
     </main>
+
+    <footer>
+        <p>&copy; 2025 Alessandro Puddu. Built with Unity performance in mind.</p>
+        <div class="social-links" style="margin-top: 1rem;">
+            <a href="mailto:alessandro.puddu94@gmail.com"><i class="fas fa-envelope"></i></a>
+            <a href="https://www.linkedin.com/in/alessandro-puddu-65118a152/"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </footer>
+
 </body>
 </html>
