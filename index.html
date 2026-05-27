@@ -3,365 +3,1040 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alessandro Puddu | Senior Unity Engineer</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
+    <meta name="description" content="Alessandro Puddu, Senior Unity and AI game developer specializing in Unity, VR, WebGL, LLM/TTS runtime integration, and production game architecture.">
+    <meta name="theme-color" content="#101417">
+    <title>Alessandro Puddu | Senior Unity & AI Game Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --accent: #3498db; /* Professional Blue */
-            --accent-hover: #2980b9;
-            --text-main: #e0e0e0;
-            --text-muted: #a0a0a0;
-            --spacing: 2rem;
+            --bg: #101417;
+            --surface: #171d21;
+            --surface-strong: #20282d;
+            --line: #2b363c;
+            --text: #f2f5f4;
+            --muted: #b8c4c0;
+            --soft: #dce3df;
+            --teal: #3dd6b4;
+            --amber: #f2b84b;
+            --rose: #ee6b7d;
+            --violet: #a995ff;
+            --blue: #64b5f6;
+            --max-width: 1160px;
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
             margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* --- HEADER & HERO --- */
-        header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
-            padding: 4rem 1rem;
-            text-align: center;
-            border-bottom: 1px solid #333;
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 52px 52px;
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent 55%);
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .skip-link {
+            position: absolute;
+            left: 1rem;
+            top: -4rem;
+            z-index: 100;
+            padding: 0.7rem 1rem;
+            background: var(--teal);
+            color: #07110f;
+            border-radius: 6px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .skip-link:focus {
+            top: 1rem;
+        }
+
+        .site-nav {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(16, 20, 23, 0.92);
+            backdrop-filter: blur(16px);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            width: min(var(--max-width), calc(100% - 2rem));
+            margin: 0 auto;
+            padding: 0.9rem 0;
+        }
+
+        .brand {
+            font-weight: 800;
+            letter-spacing: 0;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            padding: 0.45rem 0.65rem;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a:focus-visible {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.08);
+            outline: none;
+        }
+
+        .wrap {
+            width: min(var(--max-width), calc(100% - 2rem));
+            margin: 0 auto;
+        }
+
+        .hero {
+            padding: 5.5rem 0 3.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 0 1rem;
+            color: var(--teal);
+            font-weight: 800;
+            letter-spacing: 0;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 0.7rem;
+            height: 0.7rem;
+            border-radius: 999px;
+            background: var(--teal);
+            box-shadow: 0 0 0 4px rgba(61, 214, 180, 0.12);
         }
 
         h1 {
-            font-weight: 800;
-            font-size: 2.5rem;
-            margin: 0 0 1rem 0;
-            letter-spacing: -0.5px;
+            max-width: 920px;
+            margin: 0;
+            font-size: clamp(2.45rem, 7vw, 5rem);
+            line-height: 0.98;
+            letter-spacing: 0;
+            overflow-wrap: break-word;
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 2rem auto;
+        .lead {
+            max-width: 820px;
+            margin: 1.35rem 0 0;
+            color: var(--soft);
+            font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+            overflow-wrap: break-word;
         }
 
-        .social-links {
+        .hero-actions {
             display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 2rem;
         }
 
-        .social-links a {
-            color: var(--text-main);
-            font-size: 1.5rem;
-            transition: color 0.3s;
-        }
-
-        .social-links a:hover { color: var(--accent); }
-
-        /* --- BUTTONS --- */
-        .btn {
+        .button {
             display: inline-flex;
             align-items: center;
-            padding: 10px 24px;
-            color: white;
-            background-color: var(--accent);
-            border: none;
+            justify-content: center;
+            gap: 0.55rem;
+            min-height: 44px;
+            padding: 0.72rem 1rem;
             border-radius: 6px;
+            border: 1px solid var(--line);
+            background: var(--surface-strong);
+            color: var(--text);
+            font-weight: 800;
             text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s, background-color 0.2s;
-            cursor: pointer;
-            font-size: 0.95rem;
+            transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
         }
 
-        .btn:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-2px);
+        .button:hover,
+        .button:focus-visible {
+            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: #263037;
+            outline: none;
         }
 
-        .btn i { margin-right: 8px; }
-        
-        .btn-outline {
-            background-color: transparent;
-            border: 2px solid var(--accent);
-            color: var(--accent);
-        }
-        
-        .btn-outline:hover {
-            background-color: var(--accent);
-            color: white;
+        .button.primary {
+            background: var(--teal);
+            border-color: var(--teal);
+            color: #06110f;
         }
 
-        /* --- LAYOUT --- */
+        .button.primary:hover,
+        .button.primary:focus-visible {
+            background: #73e7cf;
+            border-color: #73e7cf;
+        }
+
+        .quick-facts {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1px;
+            margin-top: 3.2rem;
+            border: 1px solid var(--line);
+            background: var(--line);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .fact {
+            min-height: 128px;
+            padding: 1.1rem;
+            background: rgba(23, 29, 33, 0.94);
+        }
+
+        .fact strong {
+            display: block;
+            margin-bottom: 0.35rem;
+            color: var(--text);
+            font-size: 1.2rem;
+        }
+
+        .fact span {
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
         main {
-            max-width: 1100px;
-            margin: auto;
-            padding: 2rem 1.5rem;
+            padding: 3rem 0 0;
         }
 
-        section { margin-bottom: 4rem; }
+        section {
+            margin: 0 0 4rem;
+            scroll-margin-top: 5rem;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
 
         h2 {
-            font-size: 1.8rem;
-            border-left: 4px solid var(--accent);
-            padding-left: 1rem;
-            margin-bottom: 1.5rem;
-            color: white;
+            margin: 0;
+            font-size: clamp(1.55rem, 3vw, 2.2rem);
+            letter-spacing: 0;
         }
 
-        /* --- SKILLS GRID --- */
+        .section-note {
+            max-width: 620px;
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .focus-grid {
+            display: grid;
+            grid-template-columns: 1fr 0.8fr;
+            gap: 1.25rem;
+            align-items: stretch;
+        }
+
+        .focus-grid > *,
+        .skills-grid > *,
+        .projects > *,
+        .timeline > * {
+            min-width: 0;
+        }
+
+        .case-card,
+        .project-card,
+        .skill-card,
+        .timeline-item {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(23, 29, 33, 0.94);
+        }
+
+        .case-card {
+            padding: 1.4rem;
+        }
+
+        .case-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.32rem 0.58rem;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--soft);
+            background: rgba(255, 255, 255, 0.04);
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .case-card h3,
+        .project-card h3,
+        .timeline-item h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1.35rem;
+        }
+
+        .case-card p,
+        .project-card p,
+        .timeline-item p {
+            color: var(--muted);
+            overflow-wrap: break-word;
+        }
+
+        .impact-list {
+            display: grid;
+            gap: 0.75rem;
+            padding: 0;
+            margin: 1.2rem 0 0;
+            list-style: none;
+        }
+
+        .impact-list li {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.65rem;
+            color: var(--soft);
+        }
+
+        .impact-list i {
+            margin-top: 0.27rem;
+            color: var(--teal);
+        }
+
+        .system-map {
+            display: grid;
+            gap: 0.75rem;
+            padding: 1.4rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background:
+                linear-gradient(90deg, rgba(61, 214, 180, 0.07), transparent 55%),
+                rgba(12, 17, 19, 0.76);
+        }
+
+        .system-node {
+            padding: 0.9rem 1rem;
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--teal);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.045);
+        }
+
+        .system-node:nth-child(2) {
+            border-left-color: var(--amber);
+        }
+
+        .system-node:nth-child(3) {
+            border-left-color: var(--blue);
+        }
+
+        .system-node:nth-child(4) {
+            border-left-color: var(--rose);
+        }
+
+        .system-node strong {
+            display: block;
+            color: var(--text);
+            margin-bottom: 0.1rem;
+        }
+
+        .system-node span {
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 1rem;
         }
 
         .skill-card {
-            background-color: var(--card-bg);
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #333;
+            padding: 1.15rem;
         }
 
-        .skill-card strong { display: block; color: white; margin-bottom: 0.5rem; }
-        .skill-card span { color: var(--text-muted); font-size: 0.85rem; }
+        .skill-card i {
+            width: 2.1rem;
+            height: 2.1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.8rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.07);
+        }
 
-        /* --- PROJECTS --- */
+        .skill-card h3 {
+            margin: 0 0 0.45rem;
+            font-size: 1rem;
+        }
+
+        .skill-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.93rem;
+        }
+
+        .projects {
+            display: grid;
+            gap: 1.25rem;
+        }
+
         .project-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
+            display: grid;
+            grid-template-columns: minmax(320px, 0.82fr) 1fr;
             overflow: hidden;
-            margin-bottom: 3rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            border: 1px solid #333;
         }
 
-        .project-content { padding: 2rem; }
+        .project-card.no-media {
+            grid-template-columns: 1fr;
+        }
+
+        .project-content {
+            padding: 1.4rem;
+        }
 
         .project-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
             gap: 1rem;
-            margin-bottom: 1rem;
+            align-items: start;
+            margin-bottom: 0.8rem;
         }
 
-        .project-title h3 { margin: 0; font-size: 1.5rem; color: white; }
-        .project-role { color: var(--accent); font-weight: 600; font-size: 0.9rem; display: block; margin-top: 0.25rem; }
-        
+        .project-role {
+            display: block;
+            color: var(--teal);
+            font-size: 0.88rem;
+            font-weight: 800;
+        }
+
+        .project-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .small-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.46rem 0.62rem;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            color: var(--soft);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.84rem;
+            white-space: nowrap;
+        }
+
+        .small-link:hover,
+        .small-link:focus-visible {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.07);
+            outline: none;
+        }
+
         .tech-stack {
             display: flex;
-            gap: 0.5rem;
             flex-wrap: wrap;
+            gap: 0.45rem;
             margin: 1rem 0;
         }
 
         .tech-tag {
-            background-color: #2c2c2c;
-            color: var(--text-muted);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-family: monospace;
+            padding: 0.28rem 0.5rem;
+            border-radius: 5px;
+            background: #263037;
+            color: var(--soft);
+            font-family: "Consolas", "SFMono-Regular", monospace;
+            font-size: 0.76rem;
         }
 
-        /* Responsive Video */
-        .video-container {
+        .video-frame {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-            background: black;
-        }
-        
-        .video-container iframe {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            min-height: 100%;
+            background: #050607;
         }
 
-        /* --- FOOTER --- */
+        .video-frame iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            min-height: 300px;
+            border: 0;
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .timeline-item {
+            padding: 1.15rem;
+        }
+
+        .date {
+            display: inline-block;
+            margin-bottom: 0.7rem;
+            color: var(--amber);
+            font-weight: 800;
+            font-size: 0.84rem;
+        }
+
+        .contact-band {
+            padding: 2rem 0 3.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .contact-panel {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            padding: 1.4rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--surface);
+        }
+
+        .contact-panel p {
+            margin: 0.45rem 0 0;
+            color: var(--muted);
+        }
+
         footer {
-            text-align: center;
-            padding: 3rem;
-            background-color: #0d0d0d;
-            color: var(--text-muted);
-            border-top: 1px solid #333;
+            padding: 1.4rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--muted);
+            font-size: 0.9rem;
         }
 
-        /* Mobile Tweaks */
-        @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .project-header { flex-direction: column; }
+        footer .wrap {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .social-links a {
+            color: var(--muted);
+        }
+
+        .social-links a:hover,
+        .social-links a:focus-visible {
+            color: var(--text);
+            outline: none;
+        }
+
+        @media (max-width: 900px) {
+            .quick-facts,
+            .skills-grid,
+            .timeline {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .focus-grid,
+            .project-card,
+            .contact-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .project-header {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav-inner {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .nav-links {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                justify-content: flex-start;
+                width: 100%;
+            }
+
+            .nav-links a {
+                text-align: center;
+            }
+
+            .hero {
+                padding-top: 3.6rem;
+            }
+
+            h1 {
+                font-size: 2.18rem;
+                line-height: 1.04;
+            }
+
+            .quick-facts,
+            .skills-grid,
+            .timeline {
+                grid-template-columns: 1fr;
+            }
+
+            .fact {
+                min-height: auto;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
+    <a class="skip-link" href="#main">Skip to content</a>
 
-    <header>
-        <h1>Alessandro Puddu</h1>
-        <p class="subtitle">Senior Unity Engineer specializing in Multiplayer Architecture, Optimization, and VR/AR.</p>
-        
-        <div class="social-links">
-            <a href="https://www.linkedin.com/in/alessandro-puddu-65118a152/" target="_blank"><i class="fab fa-linkedin"></i></a>
-            <a href="https://github.com/AlessandroPuddu" target="_blank"><i class="fab fa-github"></i></a>
-            <a href="mailto:alessandro.puddu94@gmail.com"><i class="fas fa-envelope"></i></a>
+    <nav class="site-nav" aria-label="Primary navigation">
+        <div class="nav-inner">
+            <a class="brand" href="#">Alessandro Puddu</a>
+            <div class="nav-links">
+                <a href="#work">Work</a>
+                <a href="#skills">Skills</a>
+                <a href="#projects">Projects</a>
+                <a href="#experience">Experience</a>
+                <a href="#contact">Contact</a>
+            </div>
         </div>
+    </nav>
 
-        <a href="https://drive.google.com/file/d/1cFx7aPTWL08Qx7CWcOtOZVBPL2Dmj1gE/view?usp=drive_link" class="btn" target="_blank">
-            <i class="fas fa-file-download"></i> Download Resume
-        </a>
+    <header class="hero">
+        <div class="wrap">
+            <p class="eyebrow">Senior Unity & Full-Stack AI Game Developer</p>
+            <h1>Production game systems for AI characters, VR, WebGL, and shipped gameplay.</h1>
+            <p class="lead">
+                I build Unity runtimes and the backend services behind them: AI character pipelines, streamed LLM/TTS interactions,
+                VR and desktop UX, WebGL launch/auth flows, performance-critical simulation, and agentic AI-assisted engineering workflows.
+            </p>
+
+            <div class="hero-actions" aria-label="Contact and profile links">
+                <a class="button primary" href="AlessandroPuddu_CV.pdf" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+                    Download CV
+                </a>
+                <a class="button" href="mailto:alessandro.puddu94@gmail.com">
+                    <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                    Email
+                </a>
+                <a class="button" href="https://www.linkedin.com/in/alessandro-puddu-65118a152/" target="_blank" rel="noopener">
+                    <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+                    LinkedIn
+                </a>
+                <a class="button" href="https://github.com/AlessandroPuddu" target="_blank" rel="noopener">
+                    <i class="fa-brands fa-github" aria-hidden="true"></i>
+                    GitHub
+                </a>
+            </div>
+
+            <div class="quick-facts" aria-label="Career highlights">
+                <div class="fact">
+                    <strong>5+ years</strong>
+                    <span>Unity engineering across shipped games, enterprise R&D, VR, WebGL, and freelance product delivery.</span>
+                </div>
+                <div class="fact">
+                    <strong>AI runtime</strong>
+                    <span>LLM, TTS, STT, SSE/WebSocket streaming, lip sync, avatar animation, and prompt diagnostics.</span>
+                </div>
+                <div class="fact">
+                    <strong>60 FPS recovery</strong>
+                    <span>Refactored a custom Obi physics simulator from about 10 FPS to stable target-hardware performance.</span>
+                </div>
+                <div class="fact">
+                    <strong>Agentic workflow</strong>
+                    <span>Codex, Claude, Unity MCP, repo skills, guard checks, reviews, and cross-repo implementation tracking.</span>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <main>
-        <section>
-            <h2>Core Competencies</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <i class="fas fa-network-wired" style="color: #3498db; margin-bottom: 10px;"></i>
-                    <strong>Multiplayer</strong>
-                    <span>Netcode (NGO), Mirror, Authoritative Server</span>
-                </div>
-                <div class="skill-card">
-                    <i class="fas fa-tachometer-alt" style="color: #e74c3c; margin-bottom: 10px;"></i>
-                    <strong>Optimization</strong>
-                    <span>Profiler, Addressables, DOTS, Memory Management</span>
-                </div>
-                <div class="skill-card">
-                    <i class="fas fa-vr-cardboard" style="color: #9b59b6; margin-bottom: 10px;"></i>
-                    <strong>XR Development</strong>
-                    <span>OpenXR, Oculus Quest, HoloLens, WebGL</span>
-                </div>
-                <div class="skill-card">
-                    <i class="fas fa-code" style="color: #2ecc71; margin-bottom: 10px;"></i>
-                    <strong>Engineering</strong>
-                    <span>C# (Advanced), SOLID, HLSL Shaders, Tools Dev</span>
-                </div>
+    <main id="main" class="wrap">
+        <section id="work" aria-labelledby="work-title">
+            <div class="section-heading">
+                <h2 id="work-title">Current Focus</h2>
+                <p class="section-note">The newest work now leads the portfolio because it is the strongest match for AI-enabled Unity, WebGL, and product engineering roles.</p>
+            </div>
+
+            <div class="focus-grid">
+                <article class="case-card">
+                    <div class="case-meta">
+                        <span class="pill"><i class="fa-solid fa-gamepad" aria-hidden="true"></i> Unity PC / VR / WebGL</span>
+                        <span class="pill"><i class="fa-solid fa-brain" aria-hidden="true"></i> LLM / TTS / STT</span>
+                        <span class="pill"><i class="fa-solid fa-server" aria-hidden="true"></i> TypeScript / Prisma</span>
+                        <span class="pill"><i class="fa-solid fa-robot" aria-hidden="true"></i> Agentic AI</span>
+                    </div>
+                    <h3>Squircle Games / SecretWaifu</h3>
+                    <span class="project-role">Senior Unity & Full-Stack AI Game Developer, Contract | 2025 - Present</span>
+                    <p>
+                        I own cross-platform AI character product work across the Unity client and SecretWaifu web/backend. The work spans
+                        runtime architecture, secure launch flows, subscription/quota gates, real-time AI conversation, avatar response, and backend migration tooling.
+                    </p>
+                    <ul class="impact-list">
+                        <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Rebuilt runtime flow around Awaitable FSMs, StateProvider/Blackboard coordination, platform strategies, structured logging, and editor diagnostics.</span></li>
+                        <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Delivered streamed visible chat, turn-scoped TTS WebSockets, WebGL chunked audio, lip sync, typewriter timing, and expression/gesture synchronization.</span></li>
+                        <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Hardened WebGL auth bridge behavior, membership access gates, durable quota ledgers, Patreon entitlement handling, and PostgreSQL migration rehearsal tooling.</span></li>
+                        <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Used agentic AI as an engineering system: source-grounded planning, architecture reviews, migration audits, code generation, guard checks, and implementation logs.</span></li>
+                    </ul>
+                </article>
+
+                <aside class="system-map" aria-label="SecretWaifu architecture summary">
+                    <div class="system-node">
+                        <strong>Unity Runtime</strong>
+                        <span>PC, VR, WebGL, VRM avatars, wrist menu, spatial keyboard, PC/VR mode switching.</span>
+                    </div>
+                    <div class="system-node">
+                        <strong>AI Conversation</strong>
+                        <span>Provider templates, structured helper generation, streaming chat, prompt diagnostics.</span>
+                    </div>
+                    <div class="system-node">
+                        <strong>Voice & Animation</strong>
+                        <span>TTS stream gateway, chunked playback, lip sync, expressions, FinalIK and NiloToon response tuning.</span>
+                    </div>
+                    <div class="system-node">
+                        <strong>Product Backend</strong>
+                        <span>Auth, quotas, subscriptions, PostgreSQL migration tooling, admin repair paths, session state.</span>
+                    </div>
+                </aside>
             </div>
         </section>
 
-        <section>
-            <h2>Selected Projects</h2>
+        <section id="skills" aria-labelledby="skills-title">
+            <div class="section-heading">
+                <h2 id="skills-title">Engineering Strengths</h2>
+                <p class="section-note">Grouped by the skills a game studio or product team can quickly map to ownership areas.</p>
+            </div>
 
-            <article class="project-card">
-                <div class="project-content">
-                    <div class="project-header">
-                        <div class="project-title">
-                            <h3>Multiplayer Physics Simulator</h3>
-                            <span class="project-role">Lead Unity Developer | Capgemini Engineering</span>
+            <div class="skills-grid">
+                <article class="skill-card">
+                    <i class="fa-brands fa-unity" style="color: var(--teal);" aria-hidden="true"></i>
+                    <h3>Unity, VR, WebGL</h3>
+                    <p>Unity 6, C#, OpenXR, XR Interaction Toolkit, VRM avatars, UI Toolkit, Addressables, WebGL constraints, profiling, and optimization.</p>
+                </article>
+                <article class="skill-card">
+                    <i class="fa-solid fa-comments" style="color: var(--amber);" aria-hidden="true"></i>
+                    <h3>LLM, TTS, STT</h3>
+                    <p>Multi-provider chat integration, SSE and WebSocket streams, structured outputs, prompt templates, lip sync, and runtime diagnostics.</p>
+                </article>
+                <article class="skill-card">
+                    <i class="fa-solid fa-diagram-project" style="color: var(--blue);" aria-hidden="true"></i>
+                    <h3>Architecture</h3>
+                    <p>Awaitable async flows, FSMs, Blackboard state, platform strategies, persistence/cache ownership, production logging, and debugging.</p>
+                </article>
+                <article class="skill-card">
+                    <i class="fa-solid fa-database" style="color: var(--rose);" aria-hidden="true"></i>
+                    <h3>Backend Infrastructure</h3>
+                    <p>TypeScript, Node/Express, Next.js, Prisma, PostgreSQL/SQLite migration tooling, auth, quotas, subscriptions, SSE, and WebSockets.</p>
+                </article>
+                <article class="skill-card">
+                    <i class="fa-solid fa-robot" style="color: var(--violet);" aria-hidden="true"></i>
+                    <h3>Agentic AI Engineering</h3>
+                    <p>Codex/Claude workflows, Unity MCP automation, repo skills, research-backed plans, code review loops, migration audits, and guardrail checks.</p>
+                </article>
+                <article class="skill-card">
+                    <i class="fa-solid fa-network-wired" style="color: var(--teal);" aria-hidden="true"></i>
+                    <h3>Gameplay & Networking</h3>
+                    <p>Gameplay loops, interaction systems, physics simulation, Unity Netcode, Mirror, HLSL/ShaderLab, URP, NiloToon, and FinalIK.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="projects" aria-labelledby="projects-title">
+            <div class="section-heading">
+                <h2 id="projects-title">Selected Projects</h2>
+                <p class="section-note">Curated for relevance: shipped work, visible proof, and clear ownership instead of a long archive.</p>
+            </div>
+
+            <div class="projects">
+                <article class="project-card no-media">
+                    <div class="project-content">
+                        <div class="project-header">
+                            <div>
+                                <h3>Enterprise Multiplayer & Physics Simulator</h3>
+                                <span class="project-role">Unity Software Engineer | Capgemini Engineering</span>
+                            </div>
                         </div>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Unity Netcode</span>
+                            <span class="tech-tag">Obi Physics</span>
+                            <span class="tech-tag">Addressables</span>
+                            <span class="tech-tag">WebGL</span>
+                            <span class="tech-tag">CloudXR</span>
+                        </div>
+                        <p>
+                            Refactored a custom Obi-physics simulator integration, recovering target-hardware framerate from about 10 FPS to stable 60 FPS.
+                            Built secure remote content delivery with Addressables, WebGL/VR museum and showcase applications, multiplayer visitor experiences,
+                            browser-safe serialization, node-based editor tooling, and CloudXR integrations.
+                        </p>
                     </div>
-                    <div class="tech-stack">
-                        <span class="tech-tag">Unity Netcode (NGO)</span>
-                        <span class="tech-tag">Obi Physics</span>
-                        <span class="tech-tag">Addressables</span>
-                    </div>
-                    <p>
-                        Architected a real-time multiplayer drone simulator with an authoritative server model. 
-                        Engineered custom solver steps for the Obi Physics engine, reducing frame times from >16ms to a stable 60 FPS. 
-                        Implemented a modular "Project-to-Project" asset loading system using Unity Addressables to handle large-scale environments.
-                    </p>
-                </div>
                 </article>
 
-            <article class="project-card">
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/pDqDUOuabC4" frameborder="0" allowfullscreen></iframe>
-                </div>
-                <div class="project-content">
-                    <div class="project-header">
-                        <div class="project-title">
-                            <h3>Alaloth: Champions of the Four Kingdoms</h3>
-                            <span class="project-role">Game Programmer | Steam (Shipped)</span>
+                <article class="project-card">
+                    <div class="video-frame">
+                        <iframe src="https://www.youtube.com/embed/pDqDUOuabC4" title="Alaloth: Champions of The Four Kingdoms trailer" loading="lazy" allowfullscreen></iframe>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <div>
+                                <h3>Alaloth: Champions of The Four Kingdoms</h3>
+                                <span class="project-role">Game Programmer | Gamera Interactive</span>
+                            </div>
+                            <div class="project-actions">
+                                <a class="small-link" href="https://store.steampowered.com/app/919360/Alaloth_Champions_of_The_Four_Kingdoms/" target="_blank" rel="noopener">
+                                    <i class="fa-brands fa-steam" aria-hidden="true"></i>
+                                    Steam
+                                </a>
+                            </div>
                         </div>
-                        <a href="https://store.steampowered.com/app/919360/Alaloth_Champions_of_The_Four_Kingdoms/" target="_blank" class="btn btn-outline">
-                            <i class="fab fa-steam"></i> View on Steam
-                        </a>
-                    </div>
-                    <div class="tech-stack">
-                        <span class="tech-tag">Core Systems</span>
-                        <span class="tech-tag">UI Architecture</span>
-                        <span class="tech-tag">Tooling</span>
-                    </div>
-                    <p>
-                        Contributed to core gameplay systems for a commercially successful ARPG with 10k+ wishlists. 
-                        Developed custom Editor Tools to automate world-building, reducing level design iterations from hours to minutes. 
-                        Implemented complex UI state machines and narrative event systems.
-                    </p>
-                </div>
-            </article>
-
-            <article class="project-card">
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/NWYD53nWk_c" frameborder="0" allowfullscreen></iframe>
-                </div>
-                <div class="project-content">
-                    <div class="project-header">
-                        <div class="project-title">
-                            <h3>Apocalypse Rangers</h3>
-                            <span class="project-role">Network & Gameplay Programmer</span>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Shipped ARPG</span>
+                            <span class="tech-tag">Gameplay Systems</span>
+                            <span class="tech-tag">UI Architecture</span>
+                            <span class="tech-tag">Editor Tools</span>
                         </div>
-                        <a href="https://github.com/Matteo-Moriani/VoxcanoGames" target="_blank" class="btn btn-outline">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
+                        <p>
+                            Contributed to a shipped commercial Action-RPG with 10k+ wishlists. Built gameplay loops, UI architecture,
+                            inventory and skill systems, narrative events, production fixes, and in-engine tools for asset validation and world management.
+                        </p>
                     </div>
-                    <div class="tech-stack">
-                        <span class="tech-tag">Mirror Networking</span>
-                        <span class="tech-tag">HLSL Shaders</span>
-                        <span class="tech-tag">AI</span>
-                    </div>
-                    <p>
-                        Developed a robust client-server architecture using Mirror Networking. 
-                        Wrote custom HLSL shaders (Toon, Dynamic Grass) and computed shader-based terrain rendering. 
-                        <strong>Award:</strong> New Game Designer 2020 - 3rd Place (Online Category).
-                    </p>
-                </div>
-            </article>
+                </article>
 
-            <article class="project-card">
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/CdTGbZ79N0o" frameborder="0" allowfullscreen></iframe>
-                </div>
-                <div class="project-content">
-                    <div class="project-header">
-                        <div class="project-title">
-                            <h3>Hell for One</h3>
-                            <span class="project-role">AI & Gameplay Programmer</span>
+                <article class="project-card">
+                    <div class="video-frame">
+                        <iframe src="https://www.youtube.com/embed/NWYD53nWk_c" title="Apocalypse Rangers trailer" loading="lazy" allowfullscreen></iframe>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <div>
+                                <h3>Apocalypse Rangers</h3>
+                                <span class="project-role">Network & Gameplay Programmer</span>
+                            </div>
+                            <div class="project-actions">
+                                <a class="small-link" href="https://github.com/Matteo-Moriani/VoxcanoGames" target="_blank" rel="noopener">
+                                    <i class="fa-brands fa-github" aria-hidden="true"></i>
+                                    GitHub
+                                </a>
+                            </div>
                         </div>
-                        <a href="https://lilprince18.itch.io/hell-for-one" target="_blank" class="btn btn-outline">
-                            <i class="fab fa-itch-io"></i> Play on Itch.io
-                        </a>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Mirror</span>
+                            <span class="tech-tag">Client / Server</span>
+                            <span class="tech-tag">HLSL</span>
+                            <span class="tech-tag">AI</span>
+                        </div>
+                        <p>
+                            Built robust client-server gameplay using Mirror Networking, custom toon and dynamic grass shaders, compute-shader terrain rendering,
+                            and AI/gameplay systems. Awarded New Game Designer 2020, 3rd Place, Online Category.
+                        </p>
                     </div>
-                    <div class="tech-stack">
-                        <span class="tech-tag">RTS AI</span>
-                        <span class="tech-tag">Steering Behaviors</span>
-                    </div>
-                    <p>
-                        Designed intelligent agent AI for a hybrid RTS/Action game, implementing steering behaviors and state machines.
-                        Optimized unit spawning and management for large-scale battles.
-                        <strong>Award:</strong> New Game Designer 2020 - 1st Place.
-                    </p>
-                </div>
-            </article>
+                </article>
 
+                <article class="project-card">
+                    <div class="video-frame">
+                        <iframe src="https://www.youtube.com/embed/CdTGbZ79N0o" title="Hell for One gameplay trailer" loading="lazy" allowfullscreen></iframe>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <div>
+                                <h3>Hell for One</h3>
+                                <span class="project-role">AI & Gameplay Programmer</span>
+                            </div>
+                            <div class="project-actions">
+                                <a class="small-link" href="https://lilprince18.itch.io/hell-for-one" target="_blank" rel="noopener">
+                                    <i class="fa-brands fa-itch-io" aria-hidden="true"></i>
+                                    Itch.io
+                                </a>
+                            </div>
+                        </div>
+                        <div class="tech-stack">
+                            <span class="tech-tag">RTS AI</span>
+                            <span class="tech-tag">State Machines</span>
+                            <span class="tech-tag">Steering Behaviors</span>
+                        </div>
+                        <p>
+                            Designed intelligent agents for a hybrid RTS/action game, implementing steering behaviors, state machines, and optimized unit
+                            spawning for large battles. Awarded New Game Designer 2020, 1st Place.
+                        </p>
+                    </div>
+                </article>
+
+                <article class="project-card no-media">
+                    <div class="project-content">
+                        <div class="project-header">
+                            <div>
+                                <h3>RuNeglect</h3>
+                                <span class="project-role">HoloLens Developer | Experimental XR</span>
+                            </div>
+                        </div>
+                        <div class="tech-stack">
+                            <span class="tech-tag">HoloLens</span>
+                            <span class="tech-tag">Mixed Reality</span>
+                            <span class="tech-tag">Interaction Design</span>
+                        </div>
+                        <p>
+                            Built a mixed-reality prototype focused on spatial interaction and experimental XR use cases, extending the portfolio beyond
+                            flat-screen Unity work into head-mounted interaction design.
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="experience" aria-labelledby="experience-title">
+            <div class="section-heading">
+                <h2 id="experience-title">Experience Snapshot</h2>
+                <p class="section-note">Short-form career context for recruiters before they open the full CV.</p>
+            </div>
+
+            <div class="timeline">
+                <article class="timeline-item">
+                    <span class="date">2025 - Present</span>
+                    <h3>Squircle Games / SecretWaifu</h3>
+                    <p>Senior Unity and full-stack AI game developer for an AI character product across Unity, WebGL/VR, backend services, streaming AI, and migration tooling.</p>
+                </article>
+                <article class="timeline-item">
+                    <span class="date">2023 - 2026</span>
+                    <h3>Capgemini Engineering</h3>
+                    <p>Unity R&D engineer for simulation, multiplayer, WebGL/VR showcases, Addressables delivery, CloudXR, and target-hardware performance recovery.</p>
+                </article>
+                <article class="timeline-item">
+                    <span class="date">2021 - 2023</span>
+                    <h3>Gamera Interactive</h3>
+                    <p>Game programmer on Alaloth, contributing shipped gameplay systems, UI architecture, narrative events, tools, QA collaboration, and production fixes.</p>
+                </article>
+            </div>
         </section>
     </main>
 
+    <section id="contact" class="contact-band" aria-labelledby="contact-title">
+        <div class="wrap">
+            <div class="contact-panel">
+                <div>
+                    <h2 id="contact-title">Build the next AI game runtime.</h2>
+                    <p>Available for contract work in Unity gameplay, VR/WebGL, AI character systems, backend integration, and agentic engineering workflows.</p>
+                </div>
+                <div class="hero-actions">
+                    <a class="button primary" href="mailto:alessandro.puddu94@gmail.com">
+                        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                        Contact
+                    </a>
+                    <a class="button" href="AlessandroPuddu_CV.pdf" target="_blank" rel="noopener">
+                        <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+                        CV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer>
-        <p>&copy; 2025 Alessandro Puddu. Built with Unity performance in mind.</p>
-        <div class="social-links" style="margin-top: 1rem;">
-            <a href="mailto:alessandro.puddu94@gmail.com"><i class="fas fa-envelope"></i></a>
-            <a href="https://www.linkedin.com/in/alessandro-puddu-65118a152/"><i class="fab fa-linkedin"></i></a>
+        <div class="wrap">
+            <span>&copy; 2026 Alessandro Puddu. Senior Unity & AI Game Developer.</span>
+            <div class="social-links" aria-label="Social links">
+                <a href="mailto:alessandro.puddu94@gmail.com" aria-label="Email Alessandro"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+                <a href="https://www.linkedin.com/in/alessandro-puddu-65118a152/" target="_blank" rel="noopener" aria-label="LinkedIn profile"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+                <a href="https://github.com/AlessandroPuddu" target="_blank" rel="noopener" aria-label="GitHub profile"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+            </div>
         </div>
     </footer>
 
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Alessandro Puddu",
+        "jobTitle": "Senior Unity and AI Game Developer",
+        "url": "https://alessandropuddu.github.io/",
+        "email": "mailto:alessandro.puddu94@gmail.com",
+        "sameAs": [
+            "https://www.linkedin.com/in/alessandro-puddu-65118a152/",
+            "https://github.com/AlessandroPuddu"
+        ],
+        "knowsAbout": [
+            "Unity",
+            "C#",
+            "VR",
+            "WebGL",
+            "AI characters",
+            "LLM integration",
+            "Text to speech",
+            "Game backend architecture",
+            "Agentic AI engineering"
+        ]
+    }
+    </script>
 </body>
 </html>
