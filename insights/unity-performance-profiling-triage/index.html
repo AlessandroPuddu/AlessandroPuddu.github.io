@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unity Performance Problems: Profiling &amp; Triage | Alessandro Puddu</title>
+  <meta name="description" content="A practical Unity performance workflow: define the symptom, measure on target hardware, isolate CPU, GPU, memory and loading bottlenecks, then prove the fix.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#f6f3ec">
+  <link rel="canonical" href="https://alessandropuddu.github.io/insights/unity-performance-profiling-triage/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Unity Performance Problems: A Practical Profiling and Triage Workflow">
+  <meta property="og:description" content="Move from “the build is slow” to measured bottlenecks, prioritized fixes and evidence that the target improved.">
+  <meta property="og:url" content="https://alessandropuddu.github.io/insights/unity-performance-profiling-triage/">
+  <meta property="og:image" content="https://alessandropuddu.github.io/assets/images/og-engineering.png">
+  <meta property="article:published_time" content="2026-07-25">
+  <meta property="article:author" content="Alessandro Puddu">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Article",
+    "headline":"Unity Performance Problems: A Practical Profiling and Triage Workflow",
+    "description":"A repeatable way to define, measure, isolate and resolve Unity performance problems on target hardware.",
+    "image":"https://alessandropuddu.github.io/assets/images/og-engineering.png",
+    "datePublished":"2026-07-25",
+    "dateModified":"2026-07-25",
+    "mainEntityOfPage":"https://alessandropuddu.github.io/insights/unity-performance-profiling-triage/",
+    "author":{"@type":"Person","@id":"https://alessandropuddu.github.io/#person","name":"Alessandro Puddu"}
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><strong>Alessandro Puddu</strong><span>Senior Unity Engineer</span></a><button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-navigation" data-nav-toggle><span aria-hidden="true"></span></button><nav class="site-nav" id="site-navigation" aria-label="Primary navigation" data-site-nav data-open="false"><ul class="nav-links"><li><a href="/work-with-me/" data-nav-link>Work with me</a></li><li><a href="/capabilities/" data-nav-link>Capabilities</a></li><li><a href="/work/" data-nav-link>Work</a></li><li><a href="/insights/" data-nav-link>Insights</a></li><li><a href="/about/" data-nav-link>About</a></li></ul><a class="button button-small button-primary" href="/contact/">Start a conversation</a></nav></div></header>
+  <main id="main-content">
+    <article>
+      <header class="article-header">
+        <div class="container">
+          <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="/">Home</a></li><li><a href="/insights/">Insights</a></li><li aria-current="page">Performance triage</li></ol></nav>
+          <p class="eyebrow">Performance engineering</p>
+          <h1 class="article-title">Unity Performance Problems: A Practical Profiling and Triage Workflow</h1>
+          <p class="lead">“The build is slow” describes a user experience, not a bottleneck. Effective optimization begins by defining the failing scenario, measuring the right target and spending engineering time where it changes the product.</p>
+          <div class="article-meta"><span>By Alessandro Puddu</span><time datetime="2026-07-25">25 July 2026</time><span>8 min read</span></div>
+        </div>
+      </header>
+
+      <div class="container article-layout">
+        <aside class="article-aside" aria-label="Article contents">
+          <strong>In this article</strong>
+          <ol>
+            <li><a href="#symptom">Define the symptom</a></li>
+            <li><a href="#baseline">Capture a baseline</a></li>
+            <li><a href="#classify">Classify the limit</a></li>
+            <li><a href="#prioritize">Prioritize fixes</a></li>
+            <li><a href="#prove">Prove the result</a></li>
+          </ol>
+        </aside>
+
+        <div class="article-body">
+          <p>Unity offers many optimization techniques, which is precisely why performance work can drift. Object pooling, batching, Jobs, texture compression and asset streaming are all useful in the right context. None is a diagnosis.</p>
+          <p>A disciplined workflow prevents two expensive mistakes: optimizing the wrong subsystem and celebrating a local improvement that does not change the user-visible target.</p>
+
+          <h2 id="symptom">1. Turn the complaint into a testable symptom</h2>
+          <p>Begin with the moment the product fails, not a list of suspicious code. Define the target device, build configuration, content, user flow and acceptable outcome. “Frame rate drops below 72 fps during a crowded VR interaction on the minimum supported headset” is actionable. “The scene is heavy” is not.</p>
+          <p>Useful performance targets include:</p>
+          <ul>
+            <li>Frame-time budget and percentile, not only average frames per second.</li>
+            <li>Maximum memory footprint and whether it returns after a transition.</li>
+            <li>Startup, scene-change or first-interaction latency.</li>
+            <li>Build download size or WebGL memory constraints.</li>
+            <li>Thermal stability during a representative session.</li>
+          </ul>
+          <p>A representative scenario should be short enough to repeat and long enough to expose the problem. Record it so later captures exercise the same content and behavior.</p>
+
+          <h2 id="baseline">2. Capture a baseline on the target</h2>
+          <p>The editor is excellent for investigation and poor as a final performance authority. Editor overhead, development instrumentation, host hardware and rendering differences can change both timing and allocation behavior. Capture a development build on the actual target—or the closest defensible device class—using the same quality settings and content as the failing scenario.</p>
+          <p>Start with broad signals: CPU and GPU frame time, main-thread and render-thread activity, garbage collection, memory, draw calls, loading and network timing where relevant. The first capture should tell you which direction to investigate, not explain every sample.</p>
+          <div class="article-note"><strong>Keep the baseline comparable</strong><span>Record revision, device, operating system, Unity version, scripting backend, quality level, resolution, thermal state, scene and exact test steps. A trace without context is difficult to reproduce and easy to misread.</span></div>
+          <p>Deep Profiling and highly detailed capture modes are valuable once the search area is narrow. Enabled too early, they can create enormous traces and alter the timing relationships you are trying to understand.</p>
+
+          <h2 id="classify">3. Classify the limiting resource</h2>
+          <p>The most useful first question is whether the failing frame or transition is bound by CPU, GPU, memory, I/O or an external dependency. Real products can be limited by more than one, but the classification prevents unrelated fixes from competing for attention.</p>
+
+          <h3>CPU and scheduling</h3>
+          <p>Look for work concentrated on the main thread, repeated searches, excessive callbacks, physics cost, animation evaluation, serialization, script-driven mesh work and synchronization that leaves worker threads idle. Check whether the spike is periodic, event-driven or proportional to entity count.</p>
+
+          <h3>GPU and rendering</h3>
+          <p>Compare CPU and GPU frame time, then inspect overdraw, transparency, shadow cost, post-processing, shader complexity, render-target size, state changes and geometry. In VR, resolution and stereo rendering multiply choices that looked inexpensive on a flat display.</p>
+
+          <h3>Memory and allocations</h3>
+          <p>Separate transient managed allocations from persistent native or graphics memory. A small per-frame allocation can create visible garbage collection later; an asset lifecycle problem can grow memory across scene changes without an immediate spike. Track retained objects and unload behavior, not only the highest number.</p>
+
+          <h3>Loading, I/O and services</h3>
+          <p>Long transitions may come from synchronous asset loading, shader warm-up, decompression, web requests, retries or work that happens on the wrong thread. Instrument the transition as a sequence so the product can distinguish local processing from time spent waiting on an external system.</p>
+
+          <h2 id="prioritize">4. Prioritize by product impact and cost</h2>
+          <p>A profiler capture can reveal dozens of expensive samples. The best first fix is not automatically the largest bar. I rank candidates by how much of the failing scenario they explain, how many users or platforms they affect, the risk of changing them and the effort required to validate the change.</p>
+          <p>Prefer changes that remove repeated work or improve ownership over changes that merely hide cost. Cache a stable lookup, batch a lifecycle transition, reduce unnecessary content or move a platform decision behind a boundary before introducing more complex concurrency. Architectural simplicity often creates larger and safer gains than a clever micro-optimization.</p>
+          <p>Apply one coherent change at a time. Bundling several optimizations makes regressions harder to attribute and can conceal a change that had no effect.</p>
+
+          <h2 id="prove">5. Prove the fix and protect the budget</h2>
+          <p>Repeat the same target-device scenario and compare the same measurements. A valid result shows that the original symptom improved without moving unacceptable cost elsewhere. Faster CPU code that raises memory pressure or a lower-resolution render path that damages product clarity may not be a successful trade.</p>
+          <p>For important budgets, keep a lightweight regression check: a performance test scene, capture protocol, telemetry marker or release checklist. Exact automation depends on the product, but the threshold and scenario should survive the engineer who performed the optimization.</p>
+          <p>The final deliverable is more than a faster build. It is a short chain of evidence:</p>
+          <ol>
+            <li>The user-visible symptom and target were defined.</li>
+            <li>A repeatable baseline captured the failure.</li>
+            <li>The limiting resource and cause were isolated.</li>
+            <li>A prioritized change improved the relevant measurement.</li>
+            <li>A regression signal protects the new budget.</li>
+          </ol>
+          <div class="article-note"><strong>Working through a live performance problem?</strong><span>I can join an existing team to profile, stabilize and own the implementation through delivery. See <a href="/work-with-me/">ways to work with me</a> or send the failing scenario directly.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <section class="section section-compact"><div class="container cta-panel"><div><p class="eyebrow">Measure the right problem</p><h2>Need senior ownership of a Unity performance risk?</h2><p>A short description of the target device and failing user flow is enough to start.</p></div><div class="cta-actions"><a class="button button-primary" href="mailto:alessandro.puddu94@gmail.com?subject=Unity%20performance%20inquiry">Email Alessandro</a><a class="button button-light" href="/work-with-me/">Engagement options</a></div></div></section>
+  </main>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-copy"><a class="brand" href="/"><strong>Alessandro Puddu</strong><span>Senior Unity Engineer</span></a><p>Games, VR/XR, WebGL and real-time 3D engineering for teams that need senior ownership.</p></div><nav class="footer-links" aria-label="Footer navigation"><a href="/work-with-me/">Work with me</a><a href="/capabilities/">Capabilities</a><a href="/work/">Selected work</a><a href="/insights/">Insights</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/AlessandroPuddu_CV.pdf">Download CV</a><a href="/it/sviluppatore-unity-freelance/" lang="it">Italiano</a></nav></div><div class="footer-bottom"><span>© 2026 Alessandro Puddu.</span><span><a href="mailto:alessandro.puddu94@gmail.com">alessandro.puddu94@gmail.com</a></span></div></div></footer>
+  <script src="/assets/js/site.js" defer></script>
+</body>
+</html>

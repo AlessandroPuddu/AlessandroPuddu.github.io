@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Porting Unity Between WebGL and VR | Alessandro Puddu</title>
+  <meta name="description" content="A practical guide to porting a Unity application between WebGL and VR across architecture, input, UI, lifecycle, services, memory and performance.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#f6f3ec">
+  <link rel="canonical" href="https://alessandropuddu.github.io/insights/unity-webgl-vr-porting/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Porting a Unity Application Between WebGL and VR: Architecture, Input, UI and Performance">
+  <meta property="og:description" content="Why a WebGL-to-VR port is a product architecture change, not a build-setting change.">
+  <meta property="og:url" content="https://alessandropuddu.github.io/insights/unity-webgl-vr-porting/">
+  <meta property="og:image" content="https://alessandropuddu.github.io/assets/images/og-engineering.png">
+  <meta property="article:published_time" content="2026-07-25">
+  <meta property="article:author" content="Alessandro Puddu">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Article",
+    "headline":"Porting a Unity Application Between WebGL and VR: Architecture, Input, UI and Performance",
+    "description":"A practical guide to the platform boundaries that matter when moving a Unity application between WebGL and VR.",
+    "image":"https://alessandropuddu.github.io/assets/images/og-engineering.png",
+    "datePublished":"2026-07-25",
+    "dateModified":"2026-07-25",
+    "mainEntityOfPage":"https://alessandropuddu.github.io/insights/unity-webgl-vr-porting/",
+    "author":{"@type":"Person","@id":"https://alessandropuddu.github.io/#person","name":"Alessandro Puddu"}
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><strong>Alessandro Puddu</strong><span>Senior Unity Engineer</span></a><button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-navigation" data-nav-toggle><span aria-hidden="true"></span></button><nav class="site-nav" id="site-navigation" aria-label="Primary navigation" data-site-nav data-open="false"><ul class="nav-links"><li><a href="/work-with-me/" data-nav-link>Work with me</a></li><li><a href="/capabilities/" data-nav-link>Capabilities</a></li><li><a href="/work/" data-nav-link>Work</a></li><li><a href="/insights/" data-nav-link>Insights</a></li><li><a href="/about/" data-nav-link>About</a></li></ul><a class="button button-small button-primary" href="/contact/">Start a conversation</a></nav></div></header>
+  <main id="main-content">
+    <article>
+      <header class="article-header">
+        <div class="container">
+          <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="/">Home</a></li><li><a href="/insights/">Insights</a></li><li aria-current="page">WebGL and VR porting</li></ol></nav>
+          <p class="eyebrow">Cross-platform architecture</p>
+          <h1 class="article-title">Porting a Unity Application Between WebGL and VR: Architecture, Input, UI and Performance</h1>
+          <p class="lead">WebGL and VR can share a Unity project, product rules and content. They cannot share every assumption. A successful port identifies the platform boundary explicitly instead of distributing conditional behavior throughout the codebase.</p>
+          <div class="article-meta"><span>By Alessandro Puddu</span><time datetime="2026-07-25">25 July 2026</time><span>9 min read</span></div>
+        </div>
+      </header>
+
+      <div class="container article-layout">
+        <aside class="article-aside" aria-label="Article contents">
+          <strong>In this article</strong>
+          <ol>
+            <li><a href="#inventory">Inventory assumptions</a></li>
+            <li><a href="#input">Model input as intent</a></li>
+            <li><a href="#ui">Separate UI presentation</a></li>
+            <li><a href="#lifecycle">Handle lifecycle and services</a></li>
+            <li><a href="#performance">Set platform budgets</a></li>
+            <li><a href="#plan">Stage the port</a></li>
+          </ol>
+        </aside>
+
+        <div class="article-body">
+          <p>Changing Unity’s build target is a compiler operation. Porting is a product operation. A browser session and a headset differ in input, attention, screen geometry, lifecycle, memory, rendering cost, service access and the physical comfort of the user.</p>
+          <p>The difficult ports are rarely blocked by one unsupported API. They are slowed by platform assumptions that have no clear owner: a UI component reads mouse position directly, gameplay asks a headset singleton for pose, a loader assumes unrestricted threads, or authentication depends on a browser callback embedded deep inside product logic.</p>
+
+          <h2 id="inventory">1. Inventory the platform assumptions</h2>
+          <p>Before changing code, trace a complete representative flow on the source platform. Mark every point where the application touches the environment:</p>
+          <ul>
+            <li>Input devices, focus, pointer lock and interaction range.</li>
+            <li>Camera, tracking origin, locomotion and recentering.</li>
+            <li>Screen-space, world-space and spatial UI presentation.</li>
+            <li>Authentication, browser JavaScript, native SDKs and deep links.</li>
+            <li>Networking, streaming, local storage and file access.</li>
+            <li>Audio routing, autoplay rules and device changes.</li>
+            <li>Application pause, tab visibility, headset removal and resume.</li>
+            <li>Rendering, memory, download size and thermal constraints.</li>
+          </ul>
+          <p>This inventory becomes the port’s scope and test matrix. It also reveals which assumptions are business rules that should remain shared and which belong behind a platform boundary.</p>
+
+          <h2 id="input">2. Model input as product intent</h2>
+          <p>Mouse clicks and controller trigger presses are mechanisms. “Select,” “grab,” “confirm,” “move” and “open menu” are intentions. Product code should depend on the latter.</p>
+          <p>A useful input boundary converts platform-specific signals into shared commands with enough context for the product: target, pose or pointer position, phase, source and interaction mode. The browser implementation may use mouse, keyboard or touch; the VR implementation may use tracked controllers, hands, gaze or a ray interactor.</p>
+          <p>This does not mean forcing all interactions into their lowest common denominator. Spatial grabbing may exist only in VR and text entry may be richer on desktop. The boundary makes those differences explicit while preserving shared rules such as validation, inventory state or command authorization.</p>
+          <div class="article-note"><strong>Avoid conditional sprawl</strong><span>If platform checks appear throughout gameplay and UI code, the port becomes harder to test with every feature. Prefer a small number of injected adapters, configuration assets and platform composition points.</span></div>
+
+          <h2 id="ui">3. Share the model, adapt the presentation</h2>
+          <p>A flat UI cannot always be moved into world space and remain usable. Viewing distance, angular size, head movement, ray stability, occlusion and reach all change the interaction. Conversely, a spatial panel designed for a headset may waste space and precision in a browser.</p>
+          <p>Share state and actions where possible: menu data, validation, progress, selection and navigation rules. Let each platform own layout, interaction affordances and feedback. This keeps product behavior aligned without pretending the two experiences are visually interchangeable.</p>
+          <p>Test uncomfortable paths early: long text, error recovery, permissions, loading, account selection and confirmation dialogs. Happy-path prototypes often hide the UI work that dominates the final port.</p>
+
+          <h2 id="lifecycle">4. Treat lifecycle and services as architecture</h2>
+          <p>WebGL lives inside a browser. A tab can lose focus, the page can resize, persistent storage is constrained and JavaScript may mediate authentication or host communication. Threads and networking APIs also behave differently from desktop and device builds.</p>
+          <p>VR introduces its own lifecycle: tracking can be lost, the headset can sleep, controllers can disconnect, the tracking origin can change and platform SDKs may own identity, entitlements or overlays. The application must know which transitions pause simulation, preserve state, reconnect services or return the user to a safe location.</p>
+          <p>I isolate service contracts from their platform adapters: authentication, storage, telemetry, content delivery, voice and external navigation. Shared code receives domain results rather than browser callbacks or native SDK types. This makes failure states testable without the target device and prevents service changes from leaking across the product.</p>
+
+          <h3>Audio, networking and streaming deserve separate tests</h3>
+          <p>Browser autoplay restrictions, device routing and headset focus can all affect audio startup. Network transport or browser security policies may rule out APIs that work elsewhere. Asset streaming strategies must account for WebGL download and memory pressure as well as headset storage and decode cost. These systems should be validated in vertical slices, not left until the final build.</p>
+
+          <h2 id="performance">5. Set budgets per platform</h2>
+          <p>One shared quality setting rarely serves both targets. VR has a strict, continuous frame-time budget and often renders at high effective resolution. Missed frames affect comfort, not just polish. WebGL must manage browser memory, initial download, decompression, shader variants and a wide range of host hardware.</p>
+          <p>Define separate budgets for frame time, memory, texture and mesh quality, active content, loading and startup. Keep the decision system shared where useful, but allow platform configuration to select render features, content variants, pool sizes and concurrency limits.</p>
+          <p>Profile representative builds on representative hardware throughout the port. The editor cannot reproduce the browser’s runtime constraints or the headset’s thermal and stereo-rendering behavior.</p>
+
+          <h2 id="plan">6. Stage the port around risk</h2>
+          <p>A low-risk sequence proves the platform boundary before migrating the entire product:</p>
+          <ol>
+            <li>Choose one vertical slice that includes input, UI, content, services and a meaningful user outcome.</li>
+            <li>Build the platform composition point and the smallest required adapters.</li>
+            <li>Validate the slice on the target hardware, including failure and resume paths.</li>
+            <li>Measure frame time, memory, loading and build size against explicit budgets.</li>
+            <li>Expand feature by feature, keeping a transition matrix for both platforms.</li>
+            <li>Remove accidental assumptions as they are found instead of accumulating platform directives.</li>
+          </ol>
+          <p>The result is not just a second build. It is one product with explicit platform contracts, shared behavior where sharing is valuable, and distinct experiences where the user needs them.</p>
+          <div class="article-note"><strong>Planning a WebGL ↔ VR port?</strong><span>My <a href="/services/unity-porting-webgl-vr/">Unity porting service</a> covers architecture assessment, vertical-slice validation and implementation through a stable target build.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <section class="section section-compact"><div class="container cta-panel"><div><p class="eyebrow">One product, explicit platforms</p><h2>Need to move a Unity application between WebGL and VR?</h2><p>Send the current target, destination and most uncertain product flow. A full specification is optional.</p></div><div class="cta-actions"><a class="button button-primary" href="mailto:alessandro.puddu94@gmail.com?subject=Unity%20WebGL%20VR%20porting">Email Alessandro</a><a class="button button-light" href="/services/unity-porting-webgl-vr/">Porting service</a></div></div></section>
+  </main>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-copy"><a class="brand" href="/"><strong>Alessandro Puddu</strong><span>Senior Unity Engineer</span></a><p>Games, VR/XR, WebGL and real-time 3D engineering for teams that need senior ownership.</p></div><nav class="footer-links" aria-label="Footer navigation"><a href="/work-with-me/">Work with me</a><a href="/capabilities/">Capabilities</a><a href="/work/">Selected work</a><a href="/insights/">Insights</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/AlessandroPuddu_CV.pdf">Download CV</a><a href="/it/sviluppatore-unity-freelance/" lang="it">Italiano</a></nav></div><div class="footer-bottom"><span>© 2026 Alessandro Puddu.</span><span><a href="mailto:alessandro.puddu94@gmail.com">alessandro.puddu94@gmail.com</a></span></div></div></footer>
+  <script src="/assets/js/site.js" defer></script>
+</body>
+</html>
