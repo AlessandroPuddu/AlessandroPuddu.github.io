@@ -429,32 +429,10 @@ select {
   box-shadow: var(--shadow);
 }
 
-.system-visual::before,
-.system-visual::after {
-  position: absolute;
-  border: 1px solid rgba(36, 87, 230, 0.3);
-  content: "";
-  transform: rotate(45deg);
-}
-
-.system-visual::before {
-  top: 7rem;
-  left: 8rem;
-  width: 15rem;
-  height: 15rem;
-}
-
-.system-visual::after {
-  top: 10.5rem;
-  left: 11.5rem;
-  width: 8rem;
-  height: 8rem;
-  background: rgba(36, 87, 230, 0.07);
-}
-
 .system-grid {
   position: absolute;
   inset: 0;
+  z-index: 0;
   background-image:
     linear-gradient(rgba(17, 28, 46, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(17, 28, 46, 0.06) 1px, transparent 1px);
@@ -462,91 +440,55 @@ select {
   mask-image: linear-gradient(to bottom, black 45%, transparent 96%);
 }
 
-.system-node {
+.system-diagram {
   position: absolute;
+  inset: 0;
+  display: block;
   z-index: 2;
-  display: grid;
-  min-width: 6.5rem;
-  min-height: 4.3rem;
-  place-items: center;
-  padding: 0.65rem;
-  border: 1px solid var(--ink);
-  border-radius: 0.55rem;
-  background: var(--paper);
-  box-shadow: var(--shadow-small);
-  color: var(--ink);
-  font-size: 0.68rem;
+  width: 100%;
+  height: 100%;
+}
+
+.diagram-orbit {
+  fill: none;
+  stroke: rgba(36, 87, 230, 0.3);
+  stroke-width: 1.5;
+}
+
+.diagram-orbit-inner {
+  fill: rgba(36, 87, 230, 0.07);
+}
+
+.diagram-connector {
+  fill: none;
+  stroke: var(--teal);
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.diagram-node {
+  fill: var(--paper);
+  filter: drop-shadow(0 12px 18px rgba(17, 28, 46, 0.08));
+  stroke: var(--ink);
+  stroke-width: 1.25;
+}
+
+.diagram-core {
+  fill: var(--cobalt);
+  stroke: var(--cobalt);
+}
+
+.diagram-label {
+  fill: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
   font-weight: 800;
-  letter-spacing: 0.09em;
-  text-align: center;
-  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-anchor: middle;
 }
 
-.system-node-core {
-  top: 11.7rem;
-  left: 50%;
-  min-width: 8rem;
-  min-height: 6.2rem;
-  transform: translateX(-50%);
-  border-color: var(--cobalt);
-  background: var(--cobalt);
-  color: var(--white);
-}
-
-.system-node-web {
-  top: 3.2rem;
-  left: 2rem;
-}
-
-.system-node-vr {
-  top: 3.2rem;
-  right: 2rem;
-}
-
-.system-node-tools {
-  bottom: 3rem;
-  left: 2rem;
-}
-
-.system-node-services {
-  right: 2rem;
-  bottom: 3rem;
-}
-
-.system-line {
-  position: absolute;
-  z-index: 1;
-  height: 2px;
-  transform-origin: left center;
-  background: var(--teal);
-}
-
-.system-line-one {
-  top: 8.6rem;
-  left: 7rem;
-  width: 10rem;
-  transform: rotate(31deg);
-}
-
-.system-line-two {
-  top: 13rem;
-  left: 55%;
-  width: 10rem;
-  transform: rotate(-33deg);
-}
-
-.system-line-three {
-  top: 17rem;
-  left: 8rem;
-  width: 11rem;
-  transform: rotate(-35deg);
-}
-
-.system-line-four {
-  top: 18rem;
-  left: 54%;
-  width: 11rem;
-  transform: rotate(38deg);
+.diagram-label-core {
+  fill: var(--white);
 }
 
 .proof-strip {
@@ -1388,26 +1330,6 @@ select {
 
   .system-visual {
     min-height: 24rem;
-  }
-
-  .system-node {
-    min-width: 5rem;
-    min-height: 3.7rem;
-    font-size: 0.6rem;
-  }
-
-  .system-node-core {
-    top: 9.5rem;
-  }
-
-  .system-node-web,
-  .system-node-tools {
-    left: 0.8rem;
-  }
-
-  .system-node-vr,
-  .system-node-services {
-    right: 0.8rem;
   }
 
   .proof-grid,
