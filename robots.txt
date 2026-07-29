@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://alessandropuddu.github.io/sitemap.xml
-Sitemap: https://alessandropuddu.github.io/sitemap.txt
+Sitemap: https://solidcodeinteractive.com/sitemap.xml
+Sitemap: https://solidcodeinteractive.com/sitemap.txt
