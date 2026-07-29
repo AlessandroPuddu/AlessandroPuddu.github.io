@@ -59,6 +59,24 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://solidcodeinteractive.com/insights/cross-platform-unity-tutorials/</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://solidcodeinteractive.com/insights/unity-multi-device-input-feedback/</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://solidcodeinteractive.com/insights/refactoring-unity-runtime-ownership/</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://solidcodeinteractive.com/insights/taking-over-an-existing-unity-project/</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>yearly</changefreq>

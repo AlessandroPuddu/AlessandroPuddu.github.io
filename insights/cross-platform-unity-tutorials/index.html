@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cross-Platform Unity Tutorials | Alessandro Puddu</title>
+  <meta name="description" content="How to design Unity onboarding for desktop and VR with shared progress, platform-specific flows, input-safe evidence and presentation that fits each device.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#f6f3ec">
+  <link rel="canonical" href="https://solidcodeinteractive.com/insights/cross-platform-unity-tutorials/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Designing Cross-Platform Unity Tutorials: Shared Progress, Different Experiences">
+  <meta property="og:description" content="Keep product progress shared while desktop and VR own the flow, evidence and presentation their interaction model requires.">
+  <meta property="og:url" content="https://solidcodeinteractive.com/insights/cross-platform-unity-tutorials/">
+  <meta property="og:image" content="https://solidcodeinteractive.com/assets/images/og-engineering.png">
+  <meta property="article:published_time" content="2026-07-29">
+  <meta property="article:author" content="Alessandro Puddu">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Article",
+    "headline":"Designing Cross-Platform Unity Tutorials: Shared Progress, Different Experiences",
+    "description":"A production-oriented architecture for Unity onboarding that shares durable progress while adapting flow, evidence and presentation for desktop and VR.",
+    "image":"https://solidcodeinteractive.com/assets/images/og-engineering.png",
+    "datePublished":"2026-07-29",
+    "dateModified":"2026-07-29",
+    "mainEntityOfPage":"https://solidcodeinteractive.com/insights/cross-platform-unity-tutorials/",
+    "author":{"@type":"Person","@id":"https://solidcodeinteractive.com/#person","name":"Alessandro Puddu"}
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><strong>Alessandro Puddu</strong><span>Senior Unity Engineer</span></a><button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-navigation" data-nav-toggle><span aria-hidden="true"></span></button><nav class="site-nav" id="site-navigation" aria-label="Primary navigation" data-site-nav data-open="false"><ul class="nav-links"><li><a href="/work-with-me/" data-nav-link>Work with me</a></li><li><a href="/capabilities/" data-nav-link>Capabilities</a></li><li><a href="/work/" data-nav-link>Work</a></li><li><a href="/insights/" data-nav-link>Insights</a></li><li><a href="/about/" data-nav-link>About</a></li></ul><a class="button button-small button-primary" href="/contact/">Start a conversation</a></nav></div></header>
+  <main id="main-content">
+    <article>
+      <header class="article-header">
+        <div class="container">
+          <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="/">Home</a></li><li><a href="/insights/">Insights</a></li><li aria-current="page">Cross-platform tutorials</li></ol></nav>
+          <p class="eyebrow">Interaction architecture</p>
+          <h1 class="article-title">Designing Cross-Platform Unity Tutorials: Shared Progress, Different Experiences</h1>
+          <p class="lead">Desktop and VR users may need to learn the same product capability, but they do not perform, perceive or recover from it in the same way. Share durable progress and product intent; let each platform own the teaching flow it actually needs.</p>
+          <div class="article-meta"><span>By Alessandro Puddu</span><time datetime="2026-07-29">29 July 2026</time><span>9 min read</span></div>
+        </div>
+      </header>
+
+      <div class="container article-layout">
+        <aside class="article-aside" aria-label="Article contents">
+          <strong>In this article</strong>
+          <ol>
+            <li><a href="#intent">Share intent, not choreography</a></li>
+            <li><a href="#progress">Give progress one owner</a></li>
+            <li><a href="#flows">Separate platform flows</a></li>
+            <li><a href="#evidence">Advance from evidence</a></li>
+            <li><a href="#presentation">Adapt presentation</a></li>
+            <li><a href="#recovery">Design recovery explicitly</a></li>
+            <li><a href="#validation">Validate the complete loop</a></li>
+          </ol>
+        </aside>
+
+        <div class="article-body">
+          <p>Tutorial code often begins as a sequence of panels: show instruction, wait for input, hide instruction, mark complete. That works until the same feature must support mouse and keyboard, a gamepad, tracked controllers, gaze or direct manipulation. The sequence acquires platform checks, UI references and input subscriptions until nobody can state which part owns progress.</p>
+          <p>The underlying mistake is treating a tutorial as copy attached to controls. A production tutorial is a temporary product flow. It observes real behavior, manages progression and recovery, presents guidance in the user’s context and leaves the runtime in a valid state when it finishes or is interrupted.</p>
+
+          <h2 id="intent">1. Share product intent, not platform choreography</h2>
+          <p>Start with the capability the user must understand. “Select an object,” “adjust a value,” “complete a manipulation” and “recover from an invalid state” are product intentions. A click, stick deflection or controller gesture is only one way to demonstrate them.</p>
+          <p>A shared tutorial definition can describe durable facts:</p>
+          <ul>
+            <li>Which capability is being introduced.</li>
+            <li>Whether it has been completed or deliberately skipped.</li>
+            <li>Whether the user may replay the guidance.</li>
+            <li>Which product state makes the lesson relevant.</li>
+          </ul>
+          <p>It should not prescribe that every platform has the same number of steps. Desktop may teach a shortcut and a pointer action. VR may require alignment, reach, controller state and a recovery path. Forcing both through one universal sequence creates branches inside every transition and produces a flow that is clear on neither platform.</p>
+
+          <h2 id="progress">2. Give durable progress one owner</h2>
+          <p>Tutorial completion is persistent product data. It needs one authoritative owner that can answer whether a lesson should start, record completion and reset progress for replay. Presentation components and platform flows may observe that state, but they should not each maintain their own copy.</p>
+          <p>A small progress snapshot is usually enough: stable tutorial identifiers, completion state and the minimum versioning needed when the product changes. Keep runtime references, transient step state and device details out of persisted data.</p>
+          <div class="article-note"><strong>Ownership test</strong><span>If destroying and recreating the tutorial UI can lose completion state, the presentation owns too much. If changing a device binding requires migrating saved progress, the persistent model knows too much.</span></div>
+
+          <h2 id="flows">3. Use a platform flow when the transitions differ</h2>
+          <p>Shared infrastructure does not require a shared state machine. A useful composition is:</p>
+          <ol>
+            <li>A session decides whether onboarding is eligible and owns its lifecycle.</li>
+            <li>A platform-specific flow owns steps, transitions and transient facts.</li>
+            <li>A presentation snapshot describes what the user should currently see.</li>
+            <li>A platform-specific view renders that snapshot.</li>
+            <li>The shared progress owner records the durable result.</li>
+          </ol>
+          <p>This separation keeps the session small. It does not need to understand head-relative placement, pointer safety or the details of a recovery sequence. The desktop and VR flows can evolve independently while still producing the same external result: a completed, skipped or interrupted tutorial.</p>
+          <p>Finite state machines are useful when entry, exit and transition rules matter. Define transitions from observable facts rather than manipulating the next panel directly. That makes replay, cancellation and failure paths part of the design instead of exceptions added later.</p>
+
+          <h2 id="evidence">4. Advance from product evidence, not raw input</h2>
+          <p>A tutorial should complete a step when the intended outcome happened—not merely because an input event fired. A button press may be consumed by another system. A pointer may click the wrong target. A tracked controller can report motion without producing a valid interaction.</p>
+          <p>Prefer evidence from the real consumer: selection changed, a value reached a valid range, an interaction entered the expected lifecycle state, or the product committed an operation. Input can still help identify intent, but completion should follow the behavior the user was meant to learn.</p>
+          <p>This also prevents the tutorial from fighting the product. Input subscriptions should be scoped to the active step and disposed on exit. When the tutorial updates a control that can notify listeners, use a non-notifying update or an explicit feedback guard so guidance does not trigger product actions recursively.</p>
+
+          <h2 id="presentation">5. Adapt presentation to the device</h2>
+          <p>Desktop guidance can rely on stable screen edges, precise pointers and familiar key glyphs. VR guidance competes with head movement, depth, occlusion, controller pose and world-space content. Reusing one visual tree for both often saves files while creating a worse experience.</p>
+          <p>Share typography, colors and semantic elements where useful, but give each platform control over layout and affordances. Input glyphs are better than raw binding text when the device is known. In VR, highlighting the relevant physical control or world-space target can remove the translation from a flat instruction to a spatial action.</p>
+          <p>Placement should be recomputed from a deliberate reference frame and stabilized against jitter. “In front of the user” is not a one-time world position: it needs a policy for height, yaw, distance, occlusion and whether it follows continuously or only when a step changes.</p>
+
+          <h2 id="recovery">6. Model recovery as a first-class path</h2>
+          <p>Users do not follow tutorials from a pristine state. They move early, release controls, reopen menus, change focus or enter a configuration that makes the next action impossible. A robust flow detects when its assumptions stop being true and presents a recovery action instead of continuing with stale guidance.</p>
+          <p>Recovery should answer three questions:</p>
+          <ul>
+            <li>Which fact is no longer valid?</li>
+            <li>What action can restore a valid state without resetting unrelated product state?</li>
+            <li>When is it safe to resume the main flow?</li>
+          </ul>
+          <p>Session shutdown deserves the same attention. On completion, skip, scene change or feature teardown, remove highlights, release subscriptions, hide transient UI and stop any tutorial-owned input. A tutorial that leaves a callback or visual marker behind has not completed cleanly.</p>
+
+          <h2 id="validation">7. Validate behavior, presentation and interruption</h2>
+          <p>Test each platform as its own experience while preserving a shared acceptance result. Useful checks include:</p>
+          <ul>
+            <li>First run, replay and already-completed behavior.</li>
+            <li>Correct progression from the real product outcome.</li>
+            <li>Wrong input, early input, held input and repeated input.</li>
+            <li>Loss of focus, tracking or the active target.</li>
+            <li>Cancellation during every step.</li>
+            <li>UI placement, control highlighting and readability on the target device.</li>
+            <li>No residual subscriptions, visuals or changed product state after exit.</li>
+          </ul>
+          <p>The result is not one tutorial stretched across devices. It is one product capability taught through platform-native flows, backed by shared progress and a lifecycle the rest of the application can trust.</p>
+          <div class="article-note"><strong>Building one Unity product for multiple interaction models?</strong><span>See my <a href="/capabilities/">Unity engineering capabilities</a> or discuss an embedded engagement where architecture, input and XR presentation need to evolve together.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <section class="section section-compact"><div class="container cta-panel"><div><p class="eyebrow">Shared product, native interaction</p><h2>Need desktop and VR flows that do not fight each other?</h2><p>Send the user journey and target devices. A complete specification is optional.</p></div><div class="cta-actions"><a class="button button-primary" href="mailto:alessandro.puddu94@gmail.com?subject=Unity%20cross-platform%20interaction">Email Alessandro</a><a class="button button-light" href="/work-with-me/">Work with me</a></div></div></section>
+  </main>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-copy"><a class="brand" href="/"><strong>Alessandro Puddu</strong><span>Senior Unity Engineer</span></a><p>Games, VR/XR, WebGL and real-time 3D engineering for teams that need senior ownership.</p></div><nav class="footer-links" aria-label="Footer navigation"><a href="/work-with-me/">Work with me</a><a href="/capabilities/">Capabilities</a><a href="/work/">Selected work</a><a href="/insights/">Insights</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/AlessandroPuddu_CV.pdf">Download CV</a><a href="/it/sviluppatore-unity-freelance/" lang="it">Italiano</a></nav></div><div class="footer-bottom"><span>© 2026 Alessandro Puddu.</span><span><a href="mailto:alessandro.puddu94@gmail.com">alessandro.puddu94@gmail.com</a></span></div></div></footer>
+  <script src="/assets/js/site.js" defer></script>
+</body>
+</html>

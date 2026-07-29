@@ -7,6 +7,9 @@ https://solidcodeinteractive.com/work/
 https://solidcodeinteractive.com/about/
 https://solidcodeinteractive.com/contact/
 https://solidcodeinteractive.com/insights/
+https://solidcodeinteractive.com/insights/cross-platform-unity-tutorials/
+https://solidcodeinteractive.com/insights/unity-multi-device-input-feedback/
+https://solidcodeinteractive.com/insights/refactoring-unity-runtime-ownership/
 https://solidcodeinteractive.com/insights/taking-over-an-existing-unity-project/
 https://solidcodeinteractive.com/insights/unity-performance-profiling-triage/
 https://solidcodeinteractive.com/insights/unity-webgl-vr-porting/

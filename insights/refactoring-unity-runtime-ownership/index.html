@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Refactoring Unity Runtime Ownership | Alessandro Puddu</title>
+  <meta name="description" content="A practical method for refactoring complex Unity runtime systems by moving state, updates, validation and teardown to their real owners without breaking behavior.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#f6f3ec">
+  <link rel="canonical" href="https://solidcodeinteractive.com/insights/refactoring-unity-runtime-ownership/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Refactoring Unity Runtime Ownership Without Breaking Live Behavior">
+  <meta property="og:description" content="Reduce coordinator sprawl by moving state, frame work and teardown to the components that own the relevant lifecycle.">
+  <meta property="og:url" content="https://solidcodeinteractive.com/insights/refactoring-unity-runtime-ownership/">
+  <meta property="og:image" content="https://solidcodeinteractive.com/assets/images/og-engineering.png">
+  <meta property="article:published_time" content="2026-07-17">
+  <meta property="article:author" content="Alessandro Puddu">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Article",
+    "headline":"Refactoring Unity Runtime Ownership Without Breaking Live Behavior",
+    "description":"A practical method for relocating state, updates, validation and teardown to their true runtime owners while preserving observable behavior.",
+    "image":"https://solidcodeinteractive.com/assets/images/og-engineering.png",
+    "datePublished":"2026-07-17",
+    "dateModified":"2026-07-29",
+    "mainEntityOfPage":"https://solidcodeinteractive.com/insights/refactoring-unity-runtime-ownership/",
+    "author":{"@type":"Person","@id":"https://solidcodeinteractive.com/#person","name":"Alessandro Puddu"}
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><strong>Alessandro Puddu</strong><span>Senior Unity Engineer</span></a><button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-navigation" data-nav-toggle><span aria-hidden="true"></span></button><nav class="site-nav" id="site-navigation" aria-label="Primary navigation" data-site-nav data-open="false"><ul class="nav-links"><li><a href="/work-with-me/" data-nav-link>Work with me</a></li><li><a href="/capabilities/" data-nav-link>Capabilities</a></li><li><a href="/work/" data-nav-link>Work</a></li><li><a href="/insights/" data-nav-link>Insights</a></li><li><a href="/about/" data-nav-link>About</a></li></ul><a class="button button-small button-primary" href="/contact/">Start a conversation</a></nav></div></header>
+  <main id="main-content">
+    <article>
+      <header class="article-header">
+        <div class="container">
+          <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="/">Home</a></li><li><a href="/insights/">Insights</a></li><li aria-current="page">Runtime ownership</li></ol></nav>
+          <p class="eyebrow">Production architecture</p>
+          <h1 class="article-title">Refactoring Unity Runtime Ownership Without Breaking Live Behavior</h1>
+          <p class="lead">Large Unity systems become fragile when a central coordinator owns state, updates and teardown on behalf of every subsystem. The safest refactor is not a class reshuffle: it is a controlled transfer of responsibility to the component that owns each lifecycle.</p>
+          <div class="article-meta"><span>By Alessandro Puddu</span><time datetime="2026-07-17">17 July 2026</time><span>9 min read</span></div>
+        </div>
+      </header>
+
+      <div class="container article-layout">
+        <aside class="article-aside" aria-label="Article contents">
+          <strong>In this article</strong>
+          <ol>
+            <li><a href="#diagnose">Diagnose ownership debt</a></li>
+            <li><a href="#contract">Define the observable contract</a></li>
+            <li><a href="#transfer">Transfer one responsibility</a></li>
+            <li><a href="#state">Publish state without forwarding</a></li>
+            <li><a href="#validation">Keep validation pure</a></li>
+            <li><a href="#shutdown">Quiesce before teardown</a></li>
+            <li><a href="#migration">Finish the migration</a></li>
+          </ol>
+        </aside>
+
+        <div class="article-body">
+          <p>A coordinator often starts as useful glue. It creates a few components, forwards frame updates and exposes convenient callbacks. As the feature grows, it becomes the only place that knows when audio, animation, input, metrics and presentation should start or stop. Each new requirement adds another reference and another ordering rule.</p>
+          <p>The visible symptom is a large class. The deeper problem is ownership debt: resources live in one component, state is stored in another, updates arrive through a third and shutdown is decided somewhere else. No single boundary can guarantee its own invariants.</p>
+
+          <h2 id="diagnose">1. Identify responsibility that crosses too many hands</h2>
+          <p>Before moving code, trace one live behavior from creation to teardown. Mark:</p>
+          <ul>
+            <li>Who creates and disposes the resource.</li>
+            <li>Who stores its current state.</li>
+            <li>Who advances it each frame or reacts to events.</li>
+            <li>Who publishes results to other systems.</li>
+            <li>Who decides that it is safe to stop.</li>
+          </ul>
+          <p>If those answers point to several unrelated objects, choose one responsibility to repair first. Frame dispatch, subscription ownership and state publication are good seams because they expose lifecycle mistakes quickly.</p>
+          <p>A dependency graph is more useful here than a folder diagram. The question is not where a class lives; it is which direction control and data flow at runtime.</p>
+
+          <h2 id="contract">2. Freeze the observable contract before changing structure</h2>
+          <p>Refactoring production behavior needs an external definition of “unchanged.” Capture the consumer-visible facts: state transitions, output values, event ordering, visual result and shutdown behavior. Preserve representative logs or a short repeatable scenario where automated coverage is not practical.</p>
+          <p>Do not lock in accidental internals. A middleman callback, duplicated cache or public field used only inside the repository is not a product contract. The contract belongs at real boundaries: persisted data, serialized assets, network messages, public APIs and behavior other systems consume.</p>
+          <div class="article-note"><strong>Refactor target</strong><span>Preserve what consumers observe. Replace the path that produces it. Keeping both old and new internal paths active usually creates more uncertainty than it removes.</span></div>
+
+          <h2 id="transfer">3. Transfer one responsibility to its lifecycle owner</h2>
+          <p>Suppose a scene-level coordinator calls a subsystem’s frame method, copies its result and republishes it. If the subsystem already owns the resource and knows when it is active, it is usually the better owner of its update loop. Move the work there, update every caller and delete the forwarding path in the same change.</p>
+          <p>The transfer should include the complete responsibility:</p>
+          <ol>
+            <li>Initialization with required dependencies.</li>
+            <li>Activation and any event subscriptions.</li>
+            <li>Frame or event processing.</li>
+            <li>Publication of observable state.</li>
+            <li>Deactivation and cleanup.</li>
+          </ol>
+          <p>Moving only the method while leaving activation or state elsewhere creates distributed ownership with a different shape. The new owner must be able to explain its own valid states and guarantee its own cleanup.</p>
+
+          <h2 id="state">4. Publish state directly instead of forwarding notifications</h2>
+          <p>Coordinator chains often exist to relay values: subsystem → feature manager → scene manager → consumer. Every relay adds ordering, lifetime and duplication questions. When several consumers need the same runtime fact, expose it from the owner through a focused observable state contract.</p>
+          <p>Consumers subscribe for their own lifecycle and unsubscribe when they leave. The owner publishes one coherent snapshot rather than a sequence of loosely related callbacks. This reduces temporal coupling: a new consumer no longer requires another forwarding method in the coordinator.</p>
+          <p>Snapshots should be meaningful and stable enough for consumers, but not become a dump of private implementation details. Publish what another system needs to decide or present, not every intermediate field.</p>
+
+          <h2 id="validation">5. Make validation paths pure</h2>
+          <p>Validation becomes dangerous when it quietly creates objects, normalizes serialized data in place or changes runtime state. An authoring tool may appear to “check” an asset while also repairing it, which makes failures depend on inspection order.</p>
+          <p>Separate three operations:</p>
+          <ul>
+            <li><strong>Read:</strong> inspect the authored or runtime state without mutation.</li>
+            <li><strong>Validate:</strong> return explicit findings from that state.</li>
+            <li><strong>Transform:</strong> create a normalized result or apply an intentional repair.</li>
+          </ul>
+          <p>Pure validation gives migrations a trustworthy gate. It also makes editor tooling safer because previewing, selecting or reopening an asset cannot silently change the data being evaluated.</p>
+
+          <h2 id="shutdown">6. Quiesce the runtime before visual teardown</h2>
+          <p>Complex transitions often fade, unload or replace presentation while simulation is still running. During that window, late updates can publish new state, restart audio, move a target or trigger callbacks against objects already leaving the scene.</p>
+          <p>Use an explicit shutdown sequence:</p>
+          <ol>
+            <li>Stop accepting new commands.</li>
+            <li>Disable producers and frame-driven work.</li>
+            <li>Release or cancel asynchronous operations.</li>
+            <li>Publish the final stable state if consumers require it.</li>
+            <li>Perform the visual transition and dispose presentation.</li>
+            <li>Release the remaining session resources.</li>
+          </ol>
+          <p>This “quiesce, then transition” rule is especially valuable when several subsystems react independently. It replaces a collection of timing assumptions with one lifecycle boundary.</p>
+
+          <h2 id="migration">7. Delete the obsolete path and prove the real consumer moved</h2>
+          <p>A migration is incomplete when the new component works but the old publisher, ticker or adapter remains available. Search all callers, serialized references and construction paths. Update them together, remove obsolete types and verify that the observable output now originates from the new owner.</p>
+          <p>Prefer a sequence of vertical responsibility transfers over one repository-wide rewrite. Each step should leave the product in a coherent state and make the next boundary simpler. Useful evidence includes:</p>
+          <ul>
+            <li>The same representative flow before and after the transfer.</li>
+            <li>No duplicate callbacks or frame processing.</li>
+            <li>Clean entry, interruption and exit from the feature.</li>
+            <li>No obsolete references in code or serialized content.</li>
+            <li>A smaller coordinator whose remaining responsibilities can be stated clearly.</li>
+          </ul>
+          <p>The goal is not maximum decentralization. It is explicit ownership: orchestration composes lifecycles, components own their resources, and consumers observe stable contracts without depending on the route data once took.</p>
+          <div class="article-note"><strong>Untangling a Unity subsystem under active delivery?</strong><span>My <a href="/services/unity-project-rescue/">Unity project rescue</a> work combines architecture cleanup with a verified path back to shipping.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <section class="section section-compact"><div class="container cta-panel"><div><p class="eyebrow">Move ownership, preserve behavior</p><h2>Need to simplify a live Unity system without pausing delivery?</h2><p>Describe the boundary that has become difficult to change. Internal code is not required for the first conversation.</p></div><div class="cta-actions"><a class="button button-primary" href="mailto:alessandro.puddu94@gmail.com?subject=Unity%20runtime%20architecture">Email Alessandro</a><a class="button button-light" href="/services/unity-project-rescue/">Project rescue</a></div></div></section>
+  </main>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-copy"><a class="brand" href="/"><strong>Alessandro Puddu</strong><span>Senior Unity Engineer</span></a><p>Games, VR/XR, WebGL and real-time 3D engineering for teams that need senior ownership.</p></div><nav class="footer-links" aria-label="Footer navigation"><a href="/work-with-me/">Work with me</a><a href="/capabilities/">Capabilities</a><a href="/work/">Selected work</a><a href="/insights/">Insights</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/AlessandroPuddu_CV.pdf">Download CV</a><a href="/it/sviluppatore-unity-freelance/" lang="it">Italiano</a></nav></div><div class="footer-bottom"><span>© 2026 Alessandro Puddu.</span><span><a href="mailto:alessandro.puddu94@gmail.com">alessandro.puddu94@gmail.com</a></span></div></div></footer>
+  <script src="/assets/js/site.js" defer></script>
+</body>
+</html>
