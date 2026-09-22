@@ -14,3 +14,5 @@ https://solidcodeinteractive.com/insights/taking-over-an-existing-unity-project/
 https://solidcodeinteractive.com/insights/unity-performance-profiling-triage/
 https://solidcodeinteractive.com/insights/unity-webgl-vr-porting/
 https://solidcodeinteractive.com/it/sviluppatore-unity-freelance/
+https://solidcodeinteractive.com/insights/unity-llm-speech-integration/
+https://solidcodeinteractive.com/insights/coding-agents-unity-engineering/

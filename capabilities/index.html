@@ -12,7 +12,7 @@
   </script>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Unity Engineering Capabilities | Alessandro Puddu</title>
-  <meta name="description" content="Senior Unity engineering across gameplay systems, NPC AI, VR/XR, WebGL, performance, editor tooling, rendering, multiplayer and product integration.">
+  <meta name="description" content="Senior Unity engineering across gameplay systems, NPC AI, VR/XR, WebGL, performance, editor tooling, rendering, multiplayer, LLM integrations, TTS/STT and AI-assisted development.">
   <meta name="robots" content="index,follow"><meta name="theme-color" content="#f6f3ec">
   <link rel="canonical" href="https://solidcodeinteractive.com/capabilities/">
   <meta property="og:type" content="website"><meta property="og:title" content="Unity Engineering Capabilities"><meta property="og:description" content="Broad enough to own the problem; senior enough to keep the boundaries clear."><meta property="og:url" content="https://solidcodeinteractive.com/capabilities/"><meta property="og:image" content="https://solidcodeinteractive.com/assets/images/og-engineering.png"><meta name="twitter:card" content="summary_large_image">
@@ -41,7 +41,7 @@
         <article class="capability-group">
           <p class="eyebrow">02 / Platforms</p><h2>VR/XR, WebGL, desktop &amp; mobile</h2>
           <div class="capability-columns">
-            <div><h3>XR interaction</h3><p>OpenXR, XR Interaction Toolkit, hands/controllers, spatial UI, physical controls, comfort and headset lifecycle.</p></div>
+            <div><h3>XR interaction</h3><p>OpenXR, XR Interaction Toolkit, Meta Quest passthrough, hand tracking, controller/hand switching, locomotion, spatial UI and headset lifecycle.</p></div>
             <div><h3>WebGL delivery</h3><p>Browser launch and authentication bridges, memory limits, streamed assets/audio, focus lifecycle and JavaScript integration.</p></div>
             <div><h3>Platform architecture</h3><p>Input, services, UI and persistence expressed through clear strategies rather than platform checks spread across gameplay code.</p></div>
             <div><h3>Porting</h3><p>WebGL ↔ VR and broader cross-platform adaptation across interaction, assets, performance, services and validation.</p></div>
@@ -65,13 +65,23 @@
             <div><h3>Web product layer</h3><p>TypeScript, Node/Express, Next.js, Prisma and PostgreSQL when Unity is one part of a larger product system.</p></div>
           </div>
         </article>
+        <article class="capability-group">
+          <p class="eyebrow">05 / AI in the product</p><h2>LLM, speech &amp; interactive characters</h2>
+          <div class="capability-columns">
+            <div><h3>LLM integration</h3><p>Streamed conversational responses, conversation state, runtime context and coordination with character behaviour. Product integration, distinct from traditional NPC decision logic.</p></div>
+            <div><h3>Text-to-speech &amp; speech-to-text</h3><p>TTS/STT providers, microphone capture, streamed playback, interruption and browser/native implementations.</p></div>
+            <div><h3>Lifecycle and reliability</h3><p>Async cancellation, session ownership, stale-response handling, failure recovery and coordination between text, voice and presentation.</p></div>
+            <div><h3>Character presentation</h3><p>Animation, IK, physics-driven reactions, camera behaviour and authoring tools alongside connected services.</p></div>
+          </div>
+          <a class="text-link" href="/insights/unity-llm-speech-integration/">Read about reliable LLM and speech integration</a>
+        </article>
       </div>
     </section>
 
     <section class="section section-paper">
       <div class="container split-grid">
         <div><p class="eyebrow">Engineering workflow</p><h2 class="section-title">AI-assisted, human-owned</h2></div>
-        <div><p>I use modern coding agents for research, codebase exploration, planning, review and implementation support. The engineering responsibility remains human: understand the existing system, verify assumptions, review changes and prove behavior in the real target environment.</p><p>This is a workflow advantage, not the product positioning and not a substitute for domain judgment.</p></div>
+        <div><p>I use coding agents extensively for codebase exploration, task planning, implementation, debugging and refactoring. I maintain repository instructions and focused context, break work into reviewable changes, and assess generated output through code review and automated validation.</p><p>In Unity, a compiling script is only part of the result: authored assets, lifecycle behaviour and the target device also need verification. I retain responsibility for architecture and delivery.</p><p><a class="text-link" href="/insights/coding-agents-unity-engineering/">How I use coding agents in Unity engineering</a></p></div>
       </div>
     </section>
 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLM and Speech Integration in Unity | Alessandro Puddu</title>
+  <meta name="description" content="A practical Unity architecture for LLM responses, TTS/STT, streamed audio and interruption across desktop, WebGL and VR.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#f6f3ec">
+  <link rel="canonical" href="https://solidcodeinteractive.com/insights/unity-llm-speech-integration/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Integrating LLMs and Speech in Unity: Streaming, State and Interruption">
+  <meta property="og:description" content="A practical Unity architecture for LLM responses, TTS/STT, streamed audio and interruption across desktop, WebGL and VR.">
+  <meta property="og:url" content="https://solidcodeinteractive.com/insights/unity-llm-speech-integration/">
+  <meta property="og:image" content="https://solidcodeinteractive.com/assets/images/og-engineering.png">
+  <meta property="article:published_time" content="2026-09-22">
+  <meta property="article:author" content="Alessandro Puddu">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Integrating LLMs and Speech in Unity: Streaming, State and Interruption","description":"A practical Unity architecture for LLM responses, TTS/STT, streamed audio and interruption across desktop, WebGL and VR.","image":"https://solidcodeinteractive.com/assets/images/og-engineering.png","datePublished":"2026-09-22","dateModified":"2026-09-22","mainEntityOfPage":"https://solidcodeinteractive.com/insights/unity-llm-speech-integration/","author":{"@type":"Person","@id":"https://solidcodeinteractive.com/#person","name":"Alessandro Puddu"}}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><strong>Alessandro Puddu</strong><span>Senior Unity Engineer</span></a><button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-navigation" data-nav-toggle><span aria-hidden="true"></span></button><nav class="site-nav" id="site-navigation" aria-label="Primary navigation" data-site-nav data-open="false"><ul class="nav-links"><li><a href="/work-with-me/" data-nav-link>Work with me</a></li><li><a href="/capabilities/" data-nav-link>Capabilities</a></li><li><a href="/work/" data-nav-link>Work</a></li><li><a href="/insights/" data-nav-link>Insights</a></li><li><a href="/about/" data-nav-link>About</a></li></ul><a class="button button-small button-primary" href="/contact/">Start a conversation</a></nav></div></header>
+  <main id="main-content">
+    <article>
+      <header class="article-header"><div class="container">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="/">Home</a></li><li><a href="/insights/">Insights</a></li><li aria-current="page">LLM and Speech Integration in Unity</li></ol></nav>
+        <p class="eyebrow">Connected Unity products</p><h1 class="article-title">Integrating LLMs and Speech in Unity: Streaming, State and Interruption</h1>
+        <p class="lead">A successful API response is not yet a successful interaction. A Unity application must coordinate text, voice, animation, user input and scene lifetime while any of them can stop or change.</p>
+        <div class="article-meta"><span>By Alessandro Puddu</span><time datetime="2026-09-22">22 September 2026</time><span>5 min read</span></div>
+      </div></header>
+      <div class="container article-layout">
+        <aside class="article-aside" aria-label="Article contents"><strong>In this article</strong><ol><li><a href="#ownership">Give each conversation turn an owner</a></li><li><a href="#streaming">Treat text and audio as different streams</a></li><li><a href="#interruption">Design cancellation before the happy path</a></li><li><a href="#platforms">Keep platform details behind meaningful boundaries</a></li><li><a href="#validation">Test the interruptions users actually cause</a></li></ol></aside>
+        <div class="article-body">
+          <div class="article-note"><strong>Engineering patterns, not a client case study.</strong><span>Examples are generic. No client code, private project details or identifiable results are reproduced.</span></div>
+          <h2 id="ownership">Give each conversation turn an owner</h2>
+          <p>Start with the user-visible contract. Can a new message interrupt speech? Does closing a panel stop the request or only hide its presentation? Should a scene change preserve the conversation? These decisions belong to the product, not to whichever SDK happens to be integrated first.</p><p>I use a turn as a useful unit of ownership: it associates the request, accepted text, pending speech and presentation with one identity. The session can own durable conversation history while the turn owns temporary work. A late callback from an old turn must not update the current character or resume audio after the user has moved on.</p><p>A generation identifier is one possible safeguard. Check it before accepting an asynchronous result, alongside the owner's lifetime. This complements cancellation; it does not replace stopping work and releasing resources.</p>
+          <h2 id="streaming">Treat text and audio as different streams</h2>
+          <p>Text arriving in small increments does not imply that each increment is ready to speak. A chunk can end halfway through a word, sentence or presentation marker. Buffering for speech needs its own policy: a usable phrase boundary, bounded waiting time and a maximum pending amount.</p><p>Keep the displayed transcript separate from the speech queue. A transcript can already contain text whose audio has not played. Likewise, a provider can finish generating while playback still has buffered samples. Distinguish request completion, audio availability and audible completion instead of letting one boolean represent all three.</p><p>Define what happens when generation outruns playback: bounded buffering, backpressure where supported, or an explicit truncation policy. An unlimited queue turns a slow speaker into a memory and responsiveness problem.</p>
+          <h2 id="interruption">Design cancellation before the happy path</h2>
+          <p>For a generic museum-guide character, imagine the visitor asks another question while the current answer is playing. Stop accepting old results, cancel outstanding work where supported, stop playback, discard queued audio and release temporary presentation state. The exact sequence must follow the ownership contract; it should not depend on the order in which unrelated components receive callbacks.</p><p>Retries need the same care. Retrying a transport failure must not replay an already-spoken sentence or append the same reply twice. Record what was accepted separately from what was merely requested. Decide whether the UI offers retry, continues without voice or reports that the interaction failed.</p>
+          <h2 id="platforms">Keep platform details behind meaningful boundaries</h2>
+          <p>Microphone permission, browser audio activation, native speech libraries and headset suspension are different capabilities. Hide these differences behind focused interfaces for capture, transcription and playback rather than scattering platform conditions throughout conversation logic.</p><p>Unity's <a href="https://docs.unity3d.com/Manual/webgl-technical-overview.html">Web platform documentation</a> is a starting point for browser constraints. Verify the exact Unity version and browsers you support; do not assume that an Editor implementation proves the Web build.</p><p>Provider credentials should remain on a trusted backend, not inside a downloadable Unity client. Model-generated text or action requests also remain untrusted input: validate supported actions and arguments before allowing them to affect gameplay. Keep that validation independent from prompt wording.</p>
+          <h2 id="validation">Test the interruptions users actually cause</h2>
+          <p>Begin with controllable fake providers so failures are repeatable. Then validate the real providers and device builds. Useful acceptance cases include:</p><ul><li>A new turn begins while an old reply is still generating or speaking.</li><li>The scene unloads while transcription or synthesis is pending.</li><li>Microphone permission is denied or capture becomes unavailable.</li><li>The network stalls after some text has already been accepted.</li><li>An old callback arrives after cancellation or after a session restart.</li><li>Voice fails but the text interaction remains usable.</li><li>Closing and reopening the UI leaves no duplicate listeners or audio.</li></ul><p>Measure time to first useful text and first audible speech separately, and trace state transitions without logging sensitive conversation content by default. The engineering goal is an interaction that remains understandable when services fail, not just a convincing demo on a clean connection.</p>
+          <div class="article-note"><strong>Need senior ownership of a connected Unity product?</strong><span>Explore my <a href="/capabilities/">engineering capabilities</a> and <a href="/work-with-me/">long-term and focused engagement options</a>.</span></div>
+        </div>
+      </div>
+    </article>
+    <section class="section section-compact"><div class="container cta-panel"><div><p class="eyebrow">From engineering notes to delivery</p><h2>Have a similar Unity challenge?</h2><p>A short description is enough to start. A detailed brief is optional.</p></div><div class="cta-actions"><a class="button button-primary" href="mailto:alessandro.puddu94@gmail.com?subject=Unity%20engineering%20inquiry">Email Alessandro</a><a class="button button-light" href="https://calendar.app.google/VTckHGJEZJ2M4pQX7">Book a 30-minute fit call</a></div></div></section>
+  </main>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-copy"><a class="brand" href="/"><strong>Alessandro Puddu</strong><span>Senior Unity Engineer</span></a><p>Games, VR/XR, WebGL and real-time 3D engineering for teams that need senior ownership.</p><p><strong>Solid Code Interactive</strong> is the independent engineering practice of Alessandro Puddu.</p></div><nav class="footer-links" aria-label="Footer navigation"><a href="/work-with-me/">Work with me</a><a href="/capabilities/">Capabilities</a><a href="/work/">Selected work</a><a href="/insights/">Insights</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/AlessandroPuddu_CV.pdf">Download CV</a><a href="/it/sviluppatore-unity-freelance/" lang="it">Italiano</a></nav></div><div class="footer-bottom"><span>© 2026 Solid Code di Alessandro Puddu.</span><span><a href="mailto:alessandro.puddu94@gmail.com">alessandro.puddu94@gmail.com</a></span></div></div></footer>
+  <script src="/assets/js/site.js" defer></script>
+</body>
+</html>
+
