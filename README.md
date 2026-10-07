@@ -21,7 +21,7 @@ Then open `http://localhost:8765/`.
 - `insights/` — article index and standalone articles
 - `it/sviluppatore-unity-freelance/` — Italian commercial landing page
 - `assets/css/site.css` and `assets/js/site.js` — shared presentation and behavior
-- `assets/fonts/` — self-hosted Inter and Source Serif 4 with OFL licences
+- `assets/fonts/` — self-hosted Inter with its OFL licence
 - `assets/images/og-engineering.png` — shared 1200 × 630 social preview
 - `AlessandroPuddu_CV.pdf` — public English CV
 
